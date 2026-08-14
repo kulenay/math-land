@@ -157,6 +157,7 @@
         >⭐</text>
       </view>
       <view class="result-msg">首答答对 {{result.correct}} / {{result.total}} 题</view>
+      <view class="result-auto" wx:if="{{hasNext}}">即将进入下一关…</view>
       <view class="result-btns">
         <view class="btn-plain" bindtap="onRetry">再玩一次</view>
         <view class="btn-primary" bindtap="onNext" wx:if="{{hasNext}}">下一关 →</view>

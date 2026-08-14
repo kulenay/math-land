@@ -467,6 +467,13 @@
   font-weight: 600;
 }
 
+.result-auto {
+  font-size: 24rpx;
+  color: #4ecdc4;
+  font-weight: 700;
+  animation: float 1.6s ease-in-out infinite;
+}
+
 .result-btns {
   display: flex;
   flex-wrap: wrap;

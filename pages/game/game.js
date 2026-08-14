@@ -47,6 +47,7 @@ Page({
     }
     this.moduleId = moduleId;
     this.level = level;
+    this.total = level.questionCount;
     this.qs = questions.generateLevel(level);
     this.qIndex = 0;
     this.firstCorrect = 0;
@@ -209,6 +210,7 @@ Page({
       },
       starList: Array.from({ length: stars }, (_, i) => i),
       hasNext,
+      progress: 100,
       frogMood: '🏆',
       frogText: '通关啦！',
     });
@@ -216,9 +218,26 @@ Page({
     for (let i = 0; i < stars; i++) {
       setTimeout(() => sound.play('star'), 500 + i * 350);
     }
+    // 自动跳转：展示星星后自动进下一关 / 回地图（按钮仍可提前点击）
+    this.clearAutoJump();
+    this._autoJumpTimer = setTimeout(() => {
+      if (hasNext) {
+        this.onNext();
+      } else {
+        this.onBackMap();
+      }
+    }, 2400);
+  },
+
+  clearAutoJump() {
+    if (this._autoJumpTimer) {
+      clearTimeout(this._autoJumpTimer);
+      this._autoJumpTimer = null;
+    }
   },
 
   onRetry() {
+    this.clearAutoJump();
     this.qs = questions.generateLevel(this.level);
     this.qIndex = 0;
     this.firstCorrect = 0;
@@ -248,10 +267,12 @@ Page({
   },
 
   onHide() {
+    this.clearAutoJump();
     sound.stopAll();
   },
 
   onUnload() {
+    this.clearAutoJump();
     sound.stopAll();
   },
 });
