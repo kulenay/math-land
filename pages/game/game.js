@@ -24,7 +24,7 @@ Page({
     locked: false,
     wrongOptions: {},   // 已试错的选项 key -> true
     plateHas: {},       // feed：虫索引 -> true（在盘上）
-    picked: null,       // pair/split：第一次选中的 { key, value }
+    picked: {},        // pair/split：第一次选中的 { key, value }（恒为对象，避免 WXML null 访问）
     matched: {},        // pair：已配对的选项 key -> true
     shakeKey: null,     // 配对失败的抖动提示 key
     feedback: null,     // { type: 'correct'|'wrong', text }
@@ -86,7 +86,7 @@ Page({
       locked: false,
       wrongOptions: {},
       plateHas: {},
-      picked: null,
+      picked: {},
       matched: {},
       shakeKey: null,
       feedback: null,
@@ -203,13 +203,13 @@ Page({
     const picked = this.data.picked;
 
     // 第一次选择 / 取消选择
-    if (!picked) {
+    if (!picked.key) {
       this.setData({ picked: { key, value: parseInt(key, 10) } });
       sound.play('click');
       return;
     }
     if (picked.key === key) {
-      this.setData({ picked: null });
+      this.setData({ picked: {} });
       sound.play('click');
       return;
     }
@@ -220,7 +220,7 @@ Page({
       if (sum === 10) {
         const matched = { ...this.data.matched, [picked.key]: true, [key]: true };
         sound.play('pop');
-        this.setData({ picked: null, matched });
+        this.setData({ picked: {}, matched });
         const allMatched = q.options.every((o) => matched[String(o)]);
         if (allMatched) {
           const isFirstTry = !this._pickMistake;
@@ -245,7 +245,7 @@ Page({
     this._pickMistake = true;
     sound.play('wrong');
     this.setData({
-      picked: null,
+      picked: {},
       shakeKey,
       feedback: { type: 'wrong', text },
       frogMood: '🤗',
