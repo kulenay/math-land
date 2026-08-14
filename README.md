@@ -85,12 +85,13 @@ math-land/
 
 ## 🧪 测试
 
-核心逻辑有 node 单元测试（mock wx 运行，共 135 断言）：
+核心逻辑有 node 单元测试（mock wx 运行，共 190 断言）：
 
 ```bash
 node test/core.test.js       # 核心逻辑：关卡/题目/星级/存档（94 断言）
 node test/make-ten.test.js   # 凑十魔法模块（19 断言）
-node test/game-flow.test.js  # 游戏页完整流程（22 断言）
+node test/game-flow.test.js  # 游戏页完整流程（25 断言）
+node test/skills.test.js     # AI 技能分包原子接口（51 断言）
 ```
 
 ## 🗺️ 路线图
