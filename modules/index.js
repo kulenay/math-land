@@ -12,14 +12,14 @@ const registry = {
     name: '数一数',
     emoji: '👀',
     desc: '感知数量',
-    impl: require('./count'),
+    impl: require('./count/index.js'),
   },
   '2': {
     id: 2,
     name: '凑十魔法',
     emoji: '📦',
     desc: '十进制',
-    impl: require('./make-ten'),
+    impl: require('./make-ten/index.js'),
   },
 };
 

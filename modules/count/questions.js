@@ -4,7 +4,7 @@
 // 语义题目（不含布局），布局由 renderers.js 负责。
 // ============================================
 
-const { randInt, shuffle, pickFrom, genOptions } = require('../../core/rand');
+const { randInt, shuffle, pickFrom, genOptions } = require('../../core/rand.js');
 
 // 通用物品池
 const ITEMS = ['🍎', '🍬', '🌟', '🐟', '🎈', '🍊', '🌸', '🐝', '🍄', '🐚'];

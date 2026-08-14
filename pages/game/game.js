@@ -5,10 +5,10 @@
 //   - 星级 = 首答正确率（3 星全对 / 2 星 >=80% / 1 星通关）
 //   - 构建题（十格阵 / 喂跳跳）无对错，完成即成功；中途改过则不计首答
 // ============================================
-const modules = require('../../modules/index');
-const storage = require('../../core/storage');
-const sound = require('../../core/sound');
-const star = require('../../core/star');
+const modules = require('../../modules/index.js');
+const storage = require('../../core/storage.js');
+const sound = require('../../core/sound.js');
+const star = require('../../core/star.js');
 
 Page({
   data: {

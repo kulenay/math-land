@@ -8,7 +8,7 @@
 //   make10    凑十加法：a + b = ?，十格阵 + 散放，点选项
 // ============================================
 
-const { randInt, shuffle, pickFrom, genOptions } = require('../../core/rand');
+const { randInt, shuffle, pickFrom, genOptions } = require('../../core/rand.js');
 
 const ITEMS = ['🍎', '🌟', '🐟', '🎈', '🍊', '🌸', '🐝', '🍄'];
 const PAIRS = [[1, 9], [2, 8], [3, 7], [4, 6]]; // 和为 10 的配对池（避免 5+5 重复）

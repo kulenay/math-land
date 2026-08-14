@@ -1,6 +1,6 @@
 // 关卡地图：岛屿路径
-const modules = require('../../modules/index');
-const storage = require('../../core/storage');
+const modules = require('../../modules/index.js');
+const storage = require('../../core/storage.js');
 
 Page({
   data: {
