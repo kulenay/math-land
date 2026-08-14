@@ -35,7 +35,13 @@
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "web-prototype" },
+      { "type": "folder", "value": "test" },
+      { "type": "folder", "value": "tools" },
+      { "type": "folder", "value": ".reasonix" },
+      { "type": "file", "value": "README.md" }
+    ],
     "include": []
   },
   "editorSetting": {}
