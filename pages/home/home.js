@@ -34,4 +34,15 @@ Page({
     const id = e.currentTarget.dataset.module;
     wx.navigateTo({ url: `/pages/map/map?module=${id}` });
   },
+
+  // 调试入口：连点跳跳 5 次解锁全部关卡
+  onFrogTap() {
+    this._frogTaps = (this._frogTaps || 0) + 1;
+    if (this._frogTaps >= 5) {
+      this._frogTaps = 0;
+      storage.unlockAll(1);
+      this.refresh();
+      wx.showToast({ title: '已解锁全部关卡 ⭐', icon: 'none' });
+    }
+  },
 });

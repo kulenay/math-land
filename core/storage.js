@@ -75,10 +75,25 @@ function resetAll() {
   save({ modules: {} });
 }
 
+/** 调试用：解锁某模块全部关卡并给满星（连点主页跳跳触发）。 */
+function unlockAll(moduleId) {
+  const data = load();
+  const m = data.modules[String(moduleId)] || { stars: {}, completed: [], firstTry: {} };
+  const { getAllLevels } = require('../modules/count/levels');
+  getAllLevels(moduleId).forEach((l) => {
+    m.stars[String(l.id)] = 3;
+    if (!m.completed.includes(l.id)) m.completed.push(l.id);
+    m.firstTry[String(l.id)] = m.firstTry[String(l.id)] || 6;
+  });
+  data.modules[String(moduleId)] = m;
+  save(data);
+}
+
 module.exports = {
   saveLevelResult,
   isLevelUnlocked,
   getLevelStars,
   getModuleStars,
   resetAll,
+  unlockAll,
 };
