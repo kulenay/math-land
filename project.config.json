@@ -37,34 +37,34 @@
   "packOptions": {
     "ignore": [
       {
-        "type": "folder",
-        "value": "web-prototype"
+        "value": "web-prototype",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": "test"
+        "value": "test",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": "tools"
+        "value": "tools",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": ".reasonix"
+        "value": ".reasonix",
+        "type": "folder"
       },
       {
-        "type": "file",
-        "value": "README.md"
+        "value": "README.md",
+        "type": "file"
       },
       {
-        "type": "folder",
-        "value": "cli-agent-run"
+        "value": "cli-agent-run",
+        "type": "folder"
       }
     ],
     "include": [
       {
-        "type": "folder",
-        "value": "skills"
+        "value": "skills",
+        "type": "folder"
       }
     ]
   },

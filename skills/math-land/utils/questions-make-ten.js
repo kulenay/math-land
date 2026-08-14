@@ -19,16 +19,44 @@ function pickItem() {
 
 /**
  * 生成一关的题目序列。
+ * 同题型相邻去重：同一题型的答案指纹不连续重复（如连续两道 split 答案对相同），
+ * 提升随机感；最多重试 10 次避免死循环。
  * @param {object} level 关卡配置
  * @returns {Array} 语义题目数组
  */
 function generateLevel(level) {
   const questions = [];
+  const lastFingerprint = {};
   for (let i = 0; i < level.questionCount; i++) {
     const type = level.types[i % level.types.length];
-    questions.push(generateOne(type, level));
+    let q = generateOne(type, level);
+    let guard = 0;
+    while (fingerprint(q) === lastFingerprint[type] && guard < 10) {
+      q = generateOne(type, level);
+      guard++;
+    }
+    lastFingerprint[type] = fingerprint(q);
+    questions.push(q);
   }
   return questions;
+}
+
+/** 答案指纹：同题型相同答案时指纹相同，用于相邻去重。 */
+function fingerprint(q) {
+  switch (q.type) {
+    case 'fillten':
+      return 'fillten:' + q.filled;
+    case 'split':
+      return 'split:' + q.answerPair.slice().sort().join(',');
+    case 'pair':
+      return 'pair:' + q.pairs.map((p) => p.slice().sort().join('+')).sort().join('|');
+    case 'completen':
+      return 'completen:' + q.a;
+    case 'make10':
+      return 'make10:' + q.a + '+' + q.b;
+    default:
+      return '';
+  }
 }
 
 function generateOne(type, level) {
@@ -79,10 +107,22 @@ function genSplit() {
   };
 }
 
-/** 凑十伙伴：从配对池随机选两对，共 4 个数。 */
+/** 凑十伙伴：随机生成两对和为 10 的互异数字对（排除 5+5 避免重复按钮混淆）。 */
 function genPair() {
-  const idx = shuffle([0, 1, 2, 3]).slice(0, 2);
-  const pairs = idx.map((i) => PAIRS[i]);
+  const pairs = [];
+  const used = new Set();
+  let guard = 0;
+  while (pairs.length < 2 && guard < 80) {
+    guard++;
+    const a = randInt(1, 9);
+    const b = 10 - a;
+    if (a === b || used.has(a) || used.has(b)) continue;
+    // 与已选对中的任何数字都不重复
+    if (pairs.some(([x, y]) => x === a || x === b || y === a || y === b)) continue;
+    pairs.push([a, b]);
+    used.add(a);
+    used.add(b);
+  }
   return {
     type: 'pair',
     pairs,
@@ -102,11 +142,11 @@ function genCompleten(level) {
   };
 }
 
-/** 凑十加法：a（6~9）+ b = ?，b ≥ 10-a 保证需要用凑十法，和 ≤ 18。 */
+/** 凑十加法：a（6~9）+ b = ?，b ≥ 10-a 保证需要用凑十法，和 ≤ 17（b 上限 8）。 */
 function genMake10(level) {
   const a = randInt(level.min, level.max);
-  // b 下限取 10-a：保证"先凑 10 再算剩下的"有意义（如 6+4、8+5）
-  const b = randInt(Math.max(2, 10 - a), Math.min(6, 18 - a));
+  // b 下限取 10-a 保证"先凑 10 再算剩下的"有意义；上限 8 且和不超过 17，扩大变化
+  const b = randInt(Math.max(2, 10 - a), Math.min(8, 17 - a));
   const answer = a + b;
   return {
     type: 'make10',

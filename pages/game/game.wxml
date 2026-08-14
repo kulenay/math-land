@@ -166,7 +166,7 @@
       <view
         wx:for="{{view.groups}}"
         wx:key="index"
-        class="match-group {{wrongOptions[item.index] ? 'match-wrong' : ''}}"
+        class="match-group {{wrongOptions[item.index] ? 'match-wrong' : ''}} {{correctKey === item.key ? 'match-correct' : ''}}"
         data-key="{{item.index}}"
         bindtap="onGroupTap"
       >
@@ -183,7 +183,7 @@
     <view
       wx:for="{{view.options}}"
       wx:key="key"
-      class="option-btn {{wrongOptions[item.key] ? 'option-wrong' : ''}}"
+      class="option-btn {{wrongOptions[item.key] ? 'option-wrong' : ''}} {{correctKey === item.key ? 'option-correct' : ''}}"
       data-key="{{item.key}}"
       bindtap="onOptionTap"
     >{{item.label}}</view>

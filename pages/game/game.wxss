@@ -395,6 +395,11 @@
   border-color: #ff6b6b;
 }
 
+.match-group.match-correct {
+  border-color: #51cf66;
+  background: rgba(81, 207, 102, 0.1);
+}
+
 .match-label {
   font-size: 24rpx;
   font-weight: 700;
@@ -443,6 +448,13 @@
   border-color: #ff6b6b;
   color: #ff6b6b;
   transform: scale(0.95);
+}
+
+.option-btn.option-correct {
+  border-color: #51cf66;
+  background: rgba(81, 207, 102, 0.15);
+  color: #51cf66;
+  transform: scale(1.05);
 }
 
 /* ---------- 反馈浮层 ---------- */

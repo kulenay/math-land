@@ -10,6 +10,30 @@ const storage = require('../../core/storage.js');
 const sound = require('../../core/sound.js');
 const star = require('../../core/star.js');
 
+// ============================================
+// 跳跳反馈词库：随机取词防连续重复，反馈更有温度
+// ============================================
+const FROG_WORDS = {
+  correct: ['太棒啦！', '真厉害！', '答对啦！', '哇，好聪明！', '没错，就是它！', '棒棒哒！'],
+  correctRetry: ['对了！继续加油', '真棒！再来一题', '答对啦，坚持住！'],
+  wrong: ['再数数看，慢慢来', '没关系，再试试', '深呼吸，再看一眼', '你一定可以的'],
+  groupWrong: ['这堆不是哦，再看看别的', '再数数看，找找那一堆'],
+  pickWrong: ['这两个数凑不成 10 哦', '再想想哪两个数凑成 10'],
+  complete: ['通关啦！', '完成咯！', '好样的，全部过关！'],
+  guide: ['来试试吧！', '准备好了吗？', '一起数一数吧！'],
+};
+
+/** 随机取词，避免与上一次相同（列表 ≤1 时直接返回） */
+function pickWord(list, last) {
+  if (!list || !list.length) return '';
+  if (list.length <= 1) return list[0];
+  let w = list[Math.floor(Math.random() * list.length)];
+  while (w === last) {
+    w = list[Math.floor(Math.random() * list.length)];
+  }
+  return w;
+}
+
 Page({
   data: {
     statusBarHeight: 20,
@@ -23,6 +47,7 @@ Page({
     isChoice: true,     // 是否为选择题（true=点选项，false=构建题）
     locked: false,
     wrongOptions: {},   // 已试错的选项 key -> true
+    correctKey: null,   // 答对时短暂高亮的选项 key
     plateHas: {},       // feed：虫索引 -> true（在盘上）
     picked: {},        // pair/split：第一次选中的 { key, value }（恒为对象，避免 WXML null 访问）
     matched: {},        // pair：已配对的选项 key -> true
@@ -70,6 +95,12 @@ Page({
     this.showQuestion();
   },
 
+  // 跳跳说话：随机取词并记录，避免连续重复
+  pickFrog(list) {
+    this._lastFrog = pickWord(list, this._lastFrog);
+    return this._lastFrog;
+  },
+
   showQuestion() {
     const q = this.qs[this.qIndex];
     const view = this.mod.impl.renderers.buildView(q);
@@ -85,6 +116,7 @@ Page({
       questionIndex: this.qIndex + 1,
       locked: false,
       wrongOptions: {},
+      correctKey: null,
       plateHas: {},
       picked: {},
       matched: {},
@@ -93,7 +125,7 @@ Page({
       result: null,
       starList: [],
       frogMood: '😊',
-      frogText: q.type === 'feed' ? '点虫虫放进盘子里' : '来试试吧！',
+      frogText: q.type === 'feed' ? '点虫虫放进盘子里' : this.pickFrog(FROG_WORDS.guide),
       progress: Math.round((this.qIndex / this.total) * 100),
     });
   },
@@ -111,6 +143,8 @@ Page({
     if (correct) {
       const isFirstTry = Object.keys(this.data.wrongOptions).length === 0;
       if (isFirstTry) this.firstCorrect++;
+      // 答对选项短暂高亮（正面反馈，900ms 后随下一题清除）
+      this.setData({ correctKey: key });
       this.advance(isFirstTry);
     } else {
       sound.play('wrong');
@@ -119,7 +153,7 @@ Page({
         locked: true,
         feedback: { type: 'wrong', text: '再数数看～' },
         frogMood: '🤗',
-        frogText: '再数数看，慢慢来',
+        frogText: this.pickFrog(FROG_WORDS.wrong),
       });
       setTimeout(() => this.setData({ locked: false, feedback: null }), 700);
     }
@@ -133,6 +167,7 @@ Page({
     if (parseInt(key, 10) === this.q.answerIndex) {
       const isFirstTry = Object.keys(this.data.wrongOptions).length === 0;
       if (isFirstTry) this.firstCorrect++;
+      this.setData({ correctKey: key }); // 点中的堆短暂高亮
       this.advance(isFirstTry);
     } else {
       sound.play('wrong');
@@ -141,7 +176,7 @@ Page({
         locked: true,
         feedback: { type: 'wrong', text: '再数数看～' },
         frogMood: '🤗',
-        frogText: '这堆不是哦，再看看别的',
+        frogText: this.pickFrog(FROG_WORDS.groupWrong),
       });
       setTimeout(() => this.setData({ locked: false, feedback: null }), 700);
     }
@@ -262,7 +297,7 @@ Page({
       locked: true,
       feedback: { type: 'correct', text: isFirstTry ? '答对啦！' : '真棒！' },
       frogMood: '🎉',
-      frogText: isFirstTry ? '太棒啦！' : '对了！继续加油',
+      frogText: this.pickFrog(isFirstTry ? FROG_WORDS.correct : FROG_WORDS.correctRetry),
     });
     sound.play('correct');
     setTimeout(() => {
@@ -294,7 +329,7 @@ Page({
       hasNext,
       progress: 100,
       frogMood: '🏆',
-      frogText: '通关啦！',
+      frogText: this.pickFrog(FROG_WORDS.complete),
     });
     // 星星逐个弹出音效
     for (let i = 0; i < stars; i++) {
