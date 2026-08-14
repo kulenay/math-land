@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>数感探索乐园</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/module1.css">
+</head>
+<body>
+  <!-- 启动页 -->
+  <div id="splash-screen" class="screen active">
+    <div class="splash-bg">
+      <div class="cloud cloud-1">☁️</div>
+      <div class="cloud cloud-2">☁️</div>
+      <div class="cloud cloud-3">☁️</div>
+    </div>
+    <div class="splash-content">
+      <div class="splash-title">
+        <span class="title-emoji">🏝️</span>
+        <h1>数感探索乐园</h1>
+        <p class="subtitle">和跳跳一起认识数字</p>
+      </div>
+      <div class="frog-character splash-frog" id="splash-frog">🐸</div>
+      <button class="btn-start" id="btn-start">开始冒险 →</button>
+    </div>
+  </div>
+
+  <!-- 主页：模块选择 -->
+  <div id="home-screen" class="screen">
+    <div class="home-header">
+      <div class="stars-display">
+        <span class="star-icon">⭐</span>
+        <span id="total-stars">0</span>
+      </div>
+      <div class="frog-character small-frog">🐸</div>
+    </div>
+    <h2 class="home-title">选择探险区域</h2>
+    <div class="module-grid">
+      <div class="module-card" data-module="1">
+        <div class="module-icon">👀</div>
+        <div class="module-name">数一数</div>
+        <div class="module-desc">感知数量</div>
+        <div class="module-stars" id="module1-stars"></div>
+      </div>
+      <div class="module-card locked" data-module="2">
+        <div class="module-icon">📦</div>
+        <div class="module-name">凑十魔法</div>
+        <div class="module-desc">十进制</div>
+        <div class="module-lock">🔒</div>
+      </div>
+      <div class="module-card locked" data-module="3">
+        <div class="module-icon">🏠</div>
+        <div class="module-name">数字搬家</div>
+        <div class="module-desc">位值</div>
+        <div class="module-lock">🔒</div>
+      </div>
+      <div class="module-card locked" data-module="4">
+        <div class="module-icon">🌉</div>
+        <div class="module-name">过河冒险</div>
+        <div class="module-desc">进退位</div>
+        <div class="module-lock">🔒</div>
+      </div>
+      <div class="module-card locked" data-module="5">
+        <div class="module-icon">🛒</div>
+        <div class="module-name">购物乐园</div>
+        <div class="module-desc">人民币</div>
+        <div class="module-lock">🔒</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模块选择页 -->
+  <div id="level-screen" class="screen">
+    <div class="level-header">
+      <button class="btn-back" id="btn-back-home">← 返回</button>
+      <div class="level-title" id="level-module-title"></div>
+      <div class="stars-display">
+        <span class="star-icon">⭐</span>
+        <span id="module-stars">0</span>
+      </div>
+    </div>
+    <div class="level-path" id="level-path">
+      <!-- 动态生成关卡节点 -->
+    </div>
+  </div>
+
+  <!-- 游戏页 -->
+  <div id="game-screen" class="screen">
+    <div class="game-header">
+      <button class="btn-back" id="btn-back-levels">←</button>
+      <div class="game-info">
+        <span class="game-level" id="game-level-name"></span>
+        <span class="game-progress" id="game-progress"></span>
+      </div>
+      <div class="game-hearts" id="game-hearts">
+        <span>❤️</span><span>❤️</span><span>❤️</span>
+      </div>
+    </div>
+    <div class="game-area" id="game-area">
+      <!-- 动态生成游戏内容 -->
+    </div>
+    <div class="game-feedback" id="game-feedback"></div>
+  </div>
+
+  <!-- 结算页 -->
+  <div id="result-screen" class="screen">
+    <div class="result-content">
+      <div class="result-emoji" id="result-emoji">🎉</div>
+      <h2 class="result-title" id="result-title">太棒了！</h2>
+      <div class="result-stars" id="result-stars"></div>
+      <p class="result-message" id="result-message"></p>
+      <div class="result-buttons">
+        <button class="btn-retry" id="btn-retry">再玩一次</button>
+        <button class="btn-next" id="btn-next">下一关 →</button>
+        <button class="btn-home" id="btn-home">回主页</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sound.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/module1.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

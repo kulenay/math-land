@@ -1,0 +1,254 @@
+/* ============================================
+   模块一：感知数量 - 样式
+   ============================================ */
+
+/* 通用游戏容器 */
+.game-container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 题目区域 */
+.question-area {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.question-text {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text);
+}
+
+/* 散落物品区域 */
+.scatter-area {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(180deg, #F8F9FA 0%, #FFFFFF 100%);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+}
+
+.scatter-item {
+  position: absolute;
+  font-size: 32px;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+/* 排列后的物品区域 */
+.arranged-area {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  padding: 16px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.arranged-item {
+  font-size: 28px;
+  animation: pop 0.3s ease forwards;
+}
+
+/* 选项按钮组 */
+.options-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.option-btn {
+  min-width: 90px;
+  padding: 16px 24px;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  background: white;
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.option-btn:active {
+  transform: scale(0.95);
+}
+
+.option-btn.selected {
+  border-color: var(--color-secondary);
+  background: rgba(78, 205, 196, 0.1);
+  color: var(--color-secondary);
+}
+
+.option-btn.correct {
+  border-color: var(--color-success);
+  background: rgba(81, 207, 102, 0.15);
+  color: var(--color-success);
+  animation: pop 0.3s ease;
+}
+
+.option-btn.wrong {
+  border-color: var(--color-accent);
+  background: rgba(255, 107, 107, 0.1);
+  color: var(--color-accent);
+  animation: shake 0.5s ease;
+}
+
+/* 十格框 */
+.ten-frame {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  padding: 16px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 280px;
+}
+
+.ten-frame-cell {
+  aspect-ratio: 1;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: #F8F9FA;
+  transition: all 0.2s ease;
+}
+
+.ten-frame-cell.filled {
+  background: white;
+  border-color: var(--color-secondary);
+  animation: pop 0.3s ease;
+}
+
+/* 验证区域 */
+.verify-area {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #FFF3BF 0%, #FFE8CC 100%);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.verify-text {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.verify-breakdown {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+/* 确认按钮 */
+.btn-confirm {
+  padding: 14px 40px;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--color-secondary), #38D9A9);
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm:active {
+  transform: scale(0.95);
+}
+
+.btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 分组显示 */
+.group-display {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+.group-box {
+  flex: 1;
+  max-width: 160px;
+  padding: 12px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.group-box-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.group-box-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.group-box-items .item {
+  font-size: 24px;
+  animation: pop 0.3s ease forwards;
+}
+
+/* 计数器 */
+.counter-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: white;
+  border-radius: 50px;
+  box-shadow: var(--shadow-sm);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.counter-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  font-weight: 600;
+}
+
+/* 鼓励文字 */
+.encourage-text {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-secondary);
+  text-align: center;
+  animation: pop 0.5s ease;
+}
