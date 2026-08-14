@@ -1,6 +1,6 @@
 /* ============================================
-   模块一：感知数量（数一数）v2
-   更多鼓励反馈、连击奖励、夸张动画
+   模块一：感知数量（数一数）v3
+   十格框改为随机填充+数数
    ============================================ */
 
 const Module1 = {
@@ -9,21 +9,19 @@ const Module1 = {
   levels: [
     { id: 1, name: '认识1-5', desc: '这是多少？', min: 1, max: 5, type: 'estimate' },
     { id: 2, name: '认识6-10', desc: '数量感知', min: 6, max: 10, type: 'estimate' },
-    { id: 3, name: '十格框', desc: '凑满十个', min: 1, max: 10, type: 'tenframe' },
+    { id: 3, name: '十格框', desc: '数一数', min: 1, max: 10, type: 'tenframe' },
     { id: 4, name: '11-20数数', desc: '更大的数', min: 11, max: 20, type: 'estimate' },
     { id: 5, name: '估数挑战', desc: '混合练习', min: 1, max: 20, type: 'mixed' }
   ],
 
   items: ['🍎', '🍬', '🌟', '🐟', '🎈', '🍊', '🌸', '🐝'],
 
-  // 鼓励语（答对时随机显示）
   encourageMessages: [
     '太棒了！', '真厉害！', '你是天才！', '好聪明！',
     '跳跳为你骄傲！', '答对啦！', '真了不起！', '太强了！',
     '完美！', '就是这样！', '太厉害了！', '满分！'
   ],
 
-  // 连击鼓励语
   comboMessages: [
     '连击！🔥', '超级连击！⚡', '无敌连击！💥', '全对！🎊'
   ],
@@ -34,7 +32,7 @@ const Module1 = {
   totalQuestions: 0,
   correctCount: 0,
   hearts: 3,
-  streak: 0, // 连续答对次数
+  streak: 0,
 
   startLevel(levelId) {
     this.currentLevel = this.levels.find(l => l.id === levelId);
@@ -71,6 +69,7 @@ const Module1 = {
     }
   },
 
+  // ========== 估数关卡 ==========
   renderEstimate(area, count, item, options) {
     let html = `
       <div class="game-container">
@@ -102,17 +101,16 @@ const Module1 = {
 
     const width = container.offsetWidth;
     const height = container.offsetHeight;
-    const itemSize = 32;
 
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div');
       el.className = 'scatter-item pop-in';
       el.textContent = item;
-      el.style.animationDelay = `${i * 0.05}s`;
+      el.style.animationDelay = `${i * 0.06}s`;
       el.style.fontSize = '28px';
 
-      const x = 10 + Math.random() * (width - itemSize - 20);
-      const y = 10 + Math.random() * (height - itemSize - 20);
+      const x = 8 + Math.random() * (width - 40);
+      const y = 8 + Math.random() * (height - 40);
       el.style.left = x + 'px';
       el.style.top = y + 'px';
 
@@ -120,80 +118,66 @@ const Module1 = {
     }
   },
 
+  // ========== 十格框关卡 v3 ==========
+  // 随机填充几个格子，让孩子数
   renderTenFrame(area, count, item) {
+    // 随机选择哪些格子被填充（填 count 个）
+    const filledIndices = this.randomFillPositions(count);
+
     let html = `
       <div class="game-container">
         <div class="question-area">
-          <div class="question-text">把${item}放满格子</div>
+          <div class="question-text">十格框里有几个${item}？</div>
         </div>
         <div class="ten-frame" id="ten-frame">
     `;
 
     for (let i = 0; i < 10; i++) {
-      html += `<div class="ten-frame-cell" data-index="${i}"></div>`;
+      const isFilled = filledIndices.includes(i);
+      html += `<div class="ten-frame-cell ${isFilled ? 'filled' : ''}" data-index="${i}">
+        ${isFilled ? item : ''}
+      </div>`;
     }
 
     html += `
         </div>
-        <div class="counter-display">
-          <span class="counter-label">已放入：</span>
-          <span id="ten-frame-count">0</span> / 10
+        <div class="options-group" id="tenframe-options">
+    `;
+
+    // 生成选项
+    const options = this.generateOptions(count, 10);
+    options.forEach(opt => {
+      html += `<button class="option-btn" data-value="${opt}">${opt}个</button>`;
+    });
+
+    html += `
         </div>
       </div>
     `;
 
     area.innerHTML = html;
 
-    const cells = area.querySelectorAll('.ten-frame-cell');
-    let filledCount = 0;
-
-    cells.forEach(cell => {
-      cell.addEventListener('click', () => {
-        if (cell.classList.contains('filled')) {
-          cell.classList.remove('filled');
-          cell.textContent = '';
-          filledCount--;
-          SoundManager.split();
-        } else if (filledCount < 10) {
-          cell.classList.add('filled');
-          cell.textContent = item;
-          filledCount++;
-          SoundManager.fillCell();
-        }
-        document.getElementById('ten-frame-count').textContent = filledCount;
-
-        // 十格框满了
-        if (filledCount === 10) {
-          SoundManager.tenFrameFull();
-          App.showFeedback('✨');
-        }
-
-        // 填了正确数量
-        if (filledCount === count) {
-          setTimeout(() => this.showArrange(area, count, item), 800);
-        }
-      });
+    // 绑定按钮事件
+    area.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.checkAnswer(btn, parseInt(btn.dataset.value)));
     });
   },
 
-  showArrange(area, count, item) {
-    const verifyArea = document.createElement('div');
-    verifyArea.className = 'verify-area pop-in';
+  // 随机选择 n 个位置填充
+  randomFillPositions(n) {
+    const positions = [];
+    const available = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    const rowInfo = count > 5 ? `排了1排多${count - 5}个` : `排了${count}个`;
+    for (let i = 0; i < n; i++) {
+      const randIndex = Math.floor(Math.random() * available.length);
+      positions.push(available[randIndex]);
+      available.splice(randIndex, 1);
+    }
 
-    // 鼓励文字
-    const msg = this.encourageMessages[Math.floor(Math.random() * this.encourageMessages.length)];
-
-    verifyArea.innerHTML = `
-      <div class="encourage-text">🎉 ${msg}</div>
-      <div class="verify-text">就是${count}个${item}！</div>
-      <div class="verify-breakdown">一排5个，${rowInfo}</div>
-    `;
-    area.appendChild(verifyArea);
-
-    this.onCorrect();
+    return positions.sort((a, b) => a - b);
   },
+
+  // ========== 通用逻辑 ==========
 
   generateOptions(correct, max) {
     const options = new Set([correct]);
@@ -225,7 +209,7 @@ const Module1 = {
       this.onCorrect();
     } else {
       btn.classList.add('wrong');
-      this.streak = 0; // 答错重置连击
+      this.streak = 0;
       this.onWrong();
 
       document.querySelectorAll('.option-btn').forEach(b => {
@@ -244,14 +228,12 @@ const Module1 = {
     this.correctCount++;
     this.streak++;
 
-    // 音效：连击越多越嗨
     if (this.streak >= 3) {
       SoundManager.combo(this.streak);
     } else {
       SoundManager.correct();
     }
 
-    // 反馈动画：连击显示不同emoji
     let emoji = '🎉';
     let msg = this.encourageMessages[Math.floor(Math.random() * this.encourageMessages.length)];
 
@@ -281,7 +263,6 @@ const Module1 = {
     SoundManager.wrong();
     App.updateHearts(this.hearts);
 
-    // 答错也给鼓励
     const wrongEmojis = ['🤔', '💪', '😊', '🌈'];
     const wrongMsgs = ['再想想哦~', '没关系，继续加油！', '跳跳相信你！', '下一题一定行！'];
     const emoji = wrongEmojis[Math.floor(Math.random() * wrongEmojis.length)];
