@@ -1,0 +1,95 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+}
+
+.home-frog {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 40rpx;
+  font-size: 140rpx;
+  line-height: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.home-frog .frog-mood {
+  font-size: 56rpx;
+  transform: translate(46rpx, -64rpx);
+}
+
+.home-title {
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #2d3436;
+  margin: 24rpx 0 36rpx;
+}
+
+.module-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 28rpx;
+  padding: 0 32rpx;
+}
+
+.module-card {
+  position: relative;
+  width: 320rpx;
+  padding: 36rpx 24rpx;
+  background: #ffffff;
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 28rpx rgba(45, 52, 54, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  transition: transform 0.15s ease;
+}
+
+.module-card:active {
+  transform: scale(0.96);
+}
+
+.module-icon {
+  font-size: 88rpx;
+}
+
+.module-name {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.module-desc {
+  font-size: 24rpx;
+  color: #95a5a6;
+  font-weight: 600;
+}
+
+.module-stars {
+  font-size: 26rpx;
+  color: #ffa94d;
+  font-weight: 800;
+  margin-top: 6rpx;
+}
+
+.module-card.locked {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+
+.module-lock {
+  position: absolute;
+  top: 20rpx;
+  right: 24rpx;
+  font-size: 40rpx;
+}
+
+.home-tip {
+  text-align: center;
+  color: #95a5a6;
+  font-size: 26rpx;
+  margin-top: 48rpx;
+}

@@ -1,0 +1,73 @@
+.splash {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #bfeef7 0%, #e8f7f5 55%, #cdeff0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cloud {
+  position: absolute;
+  font-size: 90rpx;
+  opacity: 0.8;
+}
+
+.c1 { top: 12%; left: 8%; animation-delay: 0s; }
+.c2 { top: 20%; right: 10%; font-size: 60rpx; animation-delay: 0.8s; }
+.c3 { top: 40%; left: 16%; font-size: 48rpx; animation-delay: 1.6s; }
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding-bottom: 160rpx;
+}
+
+.splash-emoji {
+  font-size: 120rpx;
+}
+
+.splash-title {
+  font-size: 64rpx;
+  font-weight: 900;
+  color: #2d3436;
+  letter-spacing: 4rpx;
+}
+
+.splash-sub {
+  font-size: 30rpx;
+  color: #6b8a8a;
+  font-weight: 600;
+}
+
+.splash-frog {
+  position: relative;
+  margin: 40rpx 0 60rpx;
+  font-size: 180rpx;
+  line-height: 1;
+  animation-duration: 2.5s;
+}
+
+.splash-frog .frog-mood {
+  font-size: 80rpx;
+  transform: translate(70rpx, -90rpx);
+}
+
+.splash-btn {
+  font-size: 38rpx;
+  padding: 24rpx 80rpx;
+}
+
+.sea {
+  position: absolute;
+  bottom: 30rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  font-size: 60rpx;
+  opacity: 0.6;
+}

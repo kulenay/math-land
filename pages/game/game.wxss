@@ -1,0 +1,476 @@
+.game-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #e8f7f5 0%, #f2fbf9 100%);
+}
+
+/* ---------- 顶栏 ---------- */
+.sound-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+}
+
+.sound-btn:active {
+  transform: scale(0.9);
+}
+
+/* ---------- 进度条 ---------- */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 8rpx 32rpx 16rpx;
+}
+
+.progress-track {
+  flex: 1;
+  height: 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999rpx;
+  overflow: hidden;
+  box-shadow: inset 0 2rpx 6rpx rgba(45, 52, 54, 0.08);
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #4ecdc4, #38d9a9);
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #95a5a6;
+  min-width: 80rpx;
+  text-align: right;
+}
+
+/* ---------- 跳跳 ---------- */
+.frog-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 8rpx 32rpx 20rpx;
+}
+
+.frog-box {
+  position: relative;
+  flex-shrink: 0;
+  font-size: 100rpx;
+  line-height: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.frog-box .frog-mood {
+  font-size: 44rpx;
+  transform: translate(34rpx, -48rpx);
+}
+
+.frog-bubble {
+  max-width: 480rpx;
+  padding: 14rpx 28rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+/* ---------- 题目卡 ---------- */
+.question-card {
+  margin: 0 32rpx 20rpx;
+  padding: 24rpx 32rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  text-align: center;
+}
+
+.question-text {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+/* ---------- 操作区 ---------- */
+.play-area {
+  flex: 1;
+  min-height: 0;
+  padding: 0 32rpx;
+  overflow-y: auto;
+}
+
+/* scatter 散落区 */
+.scatter-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 380rpx;
+  background: linear-gradient(180deg, #ffffff, #f4fbf9);
+  border-radius: 28rpx;
+  border: 3rpx dashed #cfe6e2;
+  overflow: hidden;
+}
+
+.scatter-item {
+  position: absolute;
+  font-size: 60rpx;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+/* 整齐排列（subitize/compare/match/group 通用） */
+.row-area {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16rpx;
+  padding: 60rpx 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  min-height: 380rpx;
+}
+
+.row-item {
+  font-size: 56rpx;
+  line-height: 1.2;
+  animation-duration: 0.3s;
+}
+
+/* 十格阵 */
+.ten-frame {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12rpx;
+  width: 100%;
+  max-width: 560rpx;
+  margin: 0 auto;
+  padding: 24rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.ten-cell {
+  aspect-ratio: 1;
+  border: 3rpx solid #d5e8e5;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx;
+  background: #f7fbfa;
+  transition: all 0.15s ease;
+}
+
+.ten-cell.filled {
+  background: #ffffff;
+  border-color: #4ecdc4;
+  animation: pop-in 0.25s ease;
+}
+
+/* feed 喂跳跳 */
+.feed-plate {
+  padding: 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.plate-label {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  margin-bottom: 12rpx;
+}
+
+.plate-items {
+  min-height: 76rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  align-items: center;
+}
+
+.plate-bug {
+  font-size: 52rpx;
+  line-height: 1.1;
+}
+
+.plate-empty {
+  font-size: 26rpx;
+  color: #b8c9c6;
+}
+
+.bug-pool {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18rpx;
+  padding: 28rpx 12rpx;
+}
+
+.pool-bug {
+  font-size: 56rpx;
+  line-height: 1.1;
+  padding: 10rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(45, 52, 54, 0.08);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.pool-bug:active {
+  transform: scale(1.15);
+}
+
+.pool-bug.taken {
+  opacity: 0.25;
+  transform: scale(0.8);
+}
+
+.counter {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #4ecdc4;
+  padding: 16rpx 0 8rpx;
+}
+
+/* compare 比较 */
+.compare-row {
+  display: flex;
+  align-items: stretch;
+  gap: 16rpx;
+}
+
+.compare-box {
+  flex: 1;
+  padding: 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.compare-label {
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #95a5a6;
+  margin-bottom: 12rpx;
+}
+
+.compare-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10rpx;
+  min-height: 200rpx;
+  align-content: center;
+}
+
+.compare-vs {
+  display: flex;
+  align-items: center;
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #ffa94d;
+}
+
+/* group 按群计数 */
+.group-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 40rpx 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  min-height: 380rpx;
+  justify-content: center;
+}
+
+.group-pair {
+  display: flex;
+  gap: 24rpx;
+  padding: 12rpx 28rpx;
+  background: #f4fbf9;
+  border-radius: 20rpx;
+}
+
+/* match 找数量 */
+.match-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.match-group {
+  padding: 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  border: 4rpx solid transparent;
+  transition: all 0.15s ease;
+}
+
+.match-group:active {
+  border-color: #4ecdc4;
+}
+
+.match-group.match-wrong {
+  opacity: 0.4;
+  border-color: #ff6b6b;
+}
+
+.match-label {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  margin-bottom: 10rpx;
+}
+
+.match-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  min-height: 60rpx;
+  align-items: center;
+}
+
+/* ---------- 选项区 ---------- */
+.options-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 20rpx 32rpx 40rpx;
+}
+
+.option-btn {
+  min-width: 140rpx;
+  padding: 22rpx 36rpx;
+  font-size: 42rpx;
+  font-weight: 800;
+  color: #2d3436;
+  background: #ffffff;
+  border: 4rpx solid #d5e8e5;
+  border-radius: 24rpx;
+  box-shadow: 0 6rpx 16rpx rgba(45, 52, 54, 0.08);
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.option-btn:active {
+  transform: scale(0.92);
+  border-color: #4ecdc4;
+}
+
+.option-btn.option-wrong {
+  opacity: 0.35;
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  transform: scale(0.95);
+}
+
+/* ---------- 反馈浮层 ---------- */
+.feedback {
+  position: fixed;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 18rpx 44rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 999rpx;
+  box-shadow: 0 12rpx 40rpx rgba(45, 52, 54, 0.18);
+  z-index: 200;
+  animation: pop-in 0.3s ease;
+  pointer-events: none;
+}
+
+.feedback-emoji {
+  font-size: 56rpx;
+}
+
+.feedback-text {
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.feedback-correct .feedback-text {
+  color: #51cf66;
+}
+
+.feedback-wrong .feedback-text {
+  color: #ffa94d;
+}
+
+/* ---------- 结算浮层 ---------- */
+.result-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 52, 54, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+.result-card {
+  width: 560rpx;
+  padding: 48rpx 40rpx 40rpx;
+  background: linear-gradient(180deg, #ffffff, #f4fbf9);
+  border-radius: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.result-emoji {
+  font-size: 110rpx;
+  animation: bounce-up 0.6s ease;
+}
+
+.result-title {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #2d3436;
+}
+
+.result-stars {
+  display: flex;
+  gap: 8rpx;
+  font-size: 76rpx;
+  margin: 8rpx 0;
+}
+
+.result-star {
+  animation-duration: 0.4s;
+}
+
+.result-msg {
+  font-size: 28rpx;
+  color: #95a5a6;
+  font-weight: 600;
+}
+
+.result-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20rpx;
+  margin-top: 24rpx;
+}

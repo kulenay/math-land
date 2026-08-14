@@ -1,0 +1,31 @@
+<view class="page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view></view>
+    <view class="topbar-title">数感探索乐园</view>
+    <view class="topbar-stars">⭐ {{totalStars}}</view>
+  </view>
+
+  <view class="home-frog">
+    <text class="frog-body">🐸</text>
+    <text class="frog-mood">😊</text>
+  </view>
+  <view class="home-title">选择探险区域</view>
+
+  <view class="module-grid">
+    <view class="module-card" bindtap="onModuleTap" data-module="1">
+      <view class="module-icon">👀</view>
+      <view class="module-name">数一数</view>
+      <view class="module-desc">感知数量</view>
+      <view class="module-stars">⭐ {{module1Stars}}</view>
+    </view>
+
+    <view class="module-card locked" wx:for="{{lockedModules}}" wx:key="id">
+      <view class="module-icon">{{item.icon}}</view>
+      <view class="module-name">{{item.name}}</view>
+      <view class="module-desc">{{item.desc}}</view>
+      <view class="module-lock">🔒</view>
+    </view>
+  </view>
+
+  <view class="home-tip">更多区域正在建设中…</view>
+</view>

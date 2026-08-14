@@ -1,0 +1,167 @@
+<view class="game-page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view class="btn-back" bindtap="onBack">←</view>
+    <view class="topbar-title">{{levelName}}</view>
+    <view class="sound-btn" bindtap="onToggleSound">{{soundOn ? '🔊' : '🔇'}}</view>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-row">
+    <view class="progress-track">
+      <view class="progress-bar" style="width:{{progress}}%"></view>
+    </view>
+    <view class="progress-text">{{questionIndex}}/{{total}}</view>
+  </view>
+
+  <!-- 跳跳 + 气泡 -->
+  <view class="frog-row">
+    <view class="frog-box">
+      <text class="frog-body">🐸</text>
+      <text class="frog-mood">{{frogMood}}</text>
+    </view>
+    <view class="frog-bubble">{{frogText}}</view>
+  </view>
+
+  <!-- 题目 -->
+  <view class="question-card">
+    <view class="question-text">{{view.question}}</view>
+  </view>
+
+  <!-- ============ 操作区 ============ -->
+  <view class="play-area">
+    <!-- scatter：散落点数 -->
+    <view wx:if="{{view.type === 'scatter'}}" class="scatter-area">
+      <view
+        wx:for="{{view.scatter}}"
+        wx:key="index"
+        class="scatter-item anim-pop"
+        style="left:{{item.x}}%;top:{{item.y}}%;animation-delay:{{index * 50}}ms"
+      >{{item.emoji}}</view>
+    </view>
+
+    <!-- subitize：一眼报数，整齐排列 -->
+    <view wx:elif="{{view.type === 'subitize'}}" class="row-area">
+      <text wx:for="{{view.row}}" wx:key="index" class="row-item anim-pop" style="animation-delay:{{index * 80}}ms">{{item}}</text>
+    </view>
+
+    <!-- tenframe：十格阵 -->
+    <view wx:elif="{{view.type === 'tenframe'}}">
+      <view class="ten-frame">
+        <view
+          wx:for="{{view.cells}}"
+          wx:key="index"
+          class="ten-cell {{item ? 'filled' : ''}}"
+          data-index="{{index}}"
+          bindtap="onCellTap"
+        >{{item ? view.item : ''}}</view>
+      </view>
+      <view class="counter">已放入 {{view.filled}} / {{view.target}}</view>
+    </view>
+
+    <!-- feed：喂跳跳 -->
+    <view wx:elif="{{view.type === 'feed'}}">
+      <view class="feed-plate">
+        <view class="plate-label">🐸 的餐盘</view>
+        <view class="plate-items">
+          <text
+            wx:for="{{view.plate}}"
+            wx:key="index"
+            class="plate-bug anim-pop"
+            data-index="{{item}}"
+            bindtap="onBugTap"
+          >{{view.item}}</text>
+          <text wx:if="{{!view.plate.length}}" class="plate-empty">点下面的虫虫放进来</text>
+        </view>
+      </view>
+      <view class="bug-pool">
+        <text
+          wx:for="{{view.bugs}}"
+          wx:key="index"
+          class="pool-bug {{plateHas[index] ? 'taken' : ''}}"
+          data-index="{{index}}"
+          bindtap="onBugTap"
+        >{{item}}</text>
+      </view>
+      <view class="counter">已夹到 {{view.plate.length}} / {{view.target}}</view>
+    </view>
+
+    <!-- compare：比较多少 -->
+    <view wx:elif="{{view.type === 'compare'}}" class="compare-row">
+      <view class="compare-box">
+        <view class="compare-label">左边</view>
+        <view class="compare-items">
+          <text wx:for="{{view.left}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+        </view>
+      </view>
+      <view class="compare-vs">VS</view>
+      <view class="compare-box">
+        <view class="compare-label">右边</view>
+        <view class="compare-items">
+          <text wx:for="{{view.right}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- group：按群计数 -->
+    <view wx:elif="{{view.type === 'group'}}" class="group-wrap">
+      <view wx:for="{{view.groups}}" wx:key="index" class="group-pair">
+        <text wx:for="{{item}}" wx:for-item="g" wx:key="index" class="row-item anim-pop">{{g}}</text>
+      </view>
+    </view>
+
+    <!-- match：数字找数量，直接点堆 -->
+    <view wx:elif="{{view.type === 'match'}}" class="match-wrap">
+      <view
+        wx:for="{{view.groups}}"
+        wx:key="index"
+        class="match-group {{wrongOptions[item.index] ? 'match-wrong' : ''}}"
+        data-key="{{item.index}}"
+        bindtap="onGroupTap"
+      >
+        <view class="match-label">第{{index + 1}}堆</view>
+        <view class="match-items">
+          <text wx:for="{{item.row}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============ 选项区（选择题） ============ -->
+  <view class="options-group" wx:if="{{isChoice}}">
+    <view
+      wx:for="{{view.options}}"
+      wx:key="key"
+      class="option-btn {{wrongOptions[item.key] ? 'option-wrong' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="onOptionTap"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- ============ 反馈浮层 ============ -->
+  <view class="feedback feedback-{{feedback.type}}" wx:if="{{feedback}}">
+    <view class="feedback-emoji">{{feedback.type === 'correct' ? '✨' : '💡'}}</view>
+    <view class="feedback-text">{{feedback.text}}</view>
+  </view>
+
+  <!-- ============ 结算浮层 ============ -->
+  <view class="result-mask" wx:if="{{result}}">
+    <view class="result-card anim-pop">
+      <view class="result-emoji">🏆</view>
+      <view class="result-title">{{result.levelName}} 完成！</view>
+      <view class="result-stars">
+        <text
+          wx:for="{{starList}}"
+          wx:key="index"
+          class="result-star anim-pop"
+          style="animation-delay:{{index * 300}}ms"
+        >⭐</text>
+      </view>
+      <view class="result-msg">首答答对 {{result.correct}} / {{result.total}} 题</view>
+      <view class="result-btns">
+        <view class="btn-plain" bindtap="onRetry">再玩一次</view>
+        <view class="btn-primary" bindtap="onNext" wx:if="{{hasNext}}">下一关 →</view>
+        <view class="btn-plain" bindtap="onBackMap">回地图</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+project.private.config.json
+.DS_Store
+.reasonix/

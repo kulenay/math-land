@@ -1,0 +1,24 @@
+<view class="splash" style="padding-top:{{statusBarHeight}}px">
+  <view class="cloud c1 anim-float">☁️</view>
+  <view class="cloud c2 anim-float">☁️</view>
+  <view class="cloud c3 anim-float">☁️</view>
+
+  <view class="splash-content">
+    <view class="splash-emoji anim-float">🏝️</view>
+    <view class="splash-title">数感探索乐园</view>
+    <view class="splash-sub">和跳跳一起认识数字</view>
+
+    <view class="splash-frog anim-float">
+      <text class="frog-body">🐸</text>
+      <text class="frog-mood">😄</text>
+    </view>
+
+    <view class="btn-primary splash-btn" bindtap="onStart">开始冒险 →</view>
+  </view>
+
+  <view class="sea">
+    <text class="sea-wave">🌊</text>
+    <text class="sea-wave">🌊</text>
+    <text class="sea-wave">🌊</text>
+  </view>
+</view>

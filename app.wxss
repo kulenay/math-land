@@ -1,0 +1,198 @@
+/* ============================================
+   数感探索乐园 - 全局样式
+   设计语言：emoji 极简 · 圆角卡片 · 柔和渐变
+   ============================================ */
+
+page {
+  /* 设计变量 */
+  --color-primary: #4ecdc4;      /* 主色：青绿 */
+  --color-secondary: #38d9a9;    /* 强调：薄荷绿 */
+  --color-accent: #ff6b6b;       /* 错误/提醒红 */
+  --color-success: #51cf66;      /* 成功绿 */
+  --color-warn: #ffa94d;         /* 星星橙 */
+  --color-text: #2d3436;         /* 主文字 */
+  --color-text-light: #95a5a6;   /* 次要文字 */
+  --color-border: #dfe9e8;       /* 边框 */
+  --color-bg: #e8f7f5;           /* 页面背景 */
+  --radius-md: 24rpx;
+  --radius-lg: 36rpx;
+  --shadow-sm: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  --shadow-md: 0 8rpx 28rpx rgba(45, 52, 54, 0.12);
+
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 28rpx;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---------- 自定义顶栏 ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24rpx;
+  background: linear-gradient(180deg, rgba(232, 247, 245, 0.98), rgba(232, 247, 245, 0.9));
+  backdrop-filter: blur(4px);
+}
+
+.topbar-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.topbar-stars {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: var(--color-warn);
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  font-size: 34rpx;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.btn-back:active {
+  transform: scale(0.92);
+}
+
+/* ---------- 通用按钮 ---------- */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 20rpx 56rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(78, 205, 196, 0.35);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-plain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 40rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--color-text);
+  background: #ffffff;
+  border: 3rpx solid var(--color-border);
+  border-radius: 999rpx;
+}
+
+.btn-plain:active {
+  transform: scale(0.95);
+}
+
+/* ---------- 跳跳角色 ---------- */
+.frog {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  line-height: 1;
+}
+
+.frog-body {
+  font-size: 88rpx;
+  line-height: 1;
+}
+
+.frog-mood {
+  position: absolute;
+  font-size: 40rpx;
+  transform: translate(28rpx, -40rpx);
+  line-height: 1;
+}
+
+.frog-bubble {
+  position: relative;
+  max-width: 420rpx;
+  padding: 16rpx 28rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: var(--shadow-sm);
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.frog-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14rpx;
+  left: 44rpx;
+  border: 14rpx solid transparent;
+  border-top-color: #ffffff;
+  border-bottom: 0;
+}
+
+/* ---------- 动画 ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14rpx); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake-x {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-12rpx); }
+  75% { transform: translateX(12rpx); }
+}
+
+@keyframes bounce-up {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-30rpx); }
+  100% { transform: translateY(0); }
+}
+
+.anim-float { animation: float 3s ease-in-out infinite; }
+.anim-pop { animation: pop-in 0.35s ease forwards; }
+.anim-shake { animation: shake-x 0.4s ease; }
+.anim-bounce { animation: bounce-up 0.6s ease; }
+
+/* ---------- 通用工具 ---------- */
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

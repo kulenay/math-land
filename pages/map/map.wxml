@@ -1,0 +1,36 @@
+<view class="map-page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view class="btn-back" bindtap="onBack">←</view>
+    <view class="topbar-title">{{moduleName}} · 探险路线</view>
+    <view class="topbar-stars">⭐ {{totalStars}}</view>
+  </view>
+
+  <view class="map-scene">
+    <view class="deco d1">🐚</view>
+    <view class="deco d2">🌿</view>
+    <view class="deco d3">🐠</view>
+    <view class="deco d4">🌴</view>
+
+    <view class="path">
+      <view
+        wx:for="{{nodes}}"
+        wx:key="id"
+        class="path-node {{item.offset}}"
+        data-id="{{item.id}}"
+        bindtap="onLevelTap"
+      >
+        <view class="node-island {{item.current ? 'is-current' : ''}} {{item.unlocked ? '' : 'is-locked'}}">
+          <block wx:if="{{item.unlocked}}">
+            <view class="node-num">{{item.id}}</view>
+            <view class="node-stars" wx:if="{{item.stars}}">
+              <text wx:for="{{item.starArr}}" wx:key="index" class="node-star">⭐</text>
+            </view>
+            <view class="node-tap" wx:else>出发</view>
+          </block>
+          <view wx:else class="node-lock">🔒</view>
+        </view>
+        <view class="node-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+</view>
