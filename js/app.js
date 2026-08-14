@@ -163,12 +163,14 @@ const App = {
     }
   },
 
-  // 显示反馈动画
-  showFeedback(emoji) {
+  // 显示反馈动画（支持文字）
+  showFeedback(emoji, text) {
     const feedback = document.getElementById('game-feedback');
-    feedback.textContent = emoji;
+    feedback.innerHTML = text 
+      ? `<div class="feedback-emoji">${emoji}</div><div class="feedback-text">${text}</div>`
+      : `<div class="feedback-emoji">${emoji}</div>`;
     feedback.classList.add('show');
-    setTimeout(() => feedback.classList.remove('show'), 800);
+    setTimeout(() => feedback.classList.remove('show'), 1000);
   },
 
   // 显示结算页
