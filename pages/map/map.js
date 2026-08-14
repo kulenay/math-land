@@ -1,5 +1,5 @@
 // 关卡地图：岛屿路径
-const levels = require('../../modules/count/levels');
+const modules = require('../../modules/index');
 const storage = require('../../core/storage');
 
 Page({
@@ -13,10 +13,17 @@ Page({
 
   onLoad(options) {
     this.moduleId = options.module || '1';
+    const mod = modules.get(this.moduleId);
+    if (!mod) {
+      wx.showToast({ title: '模块不存在', icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 900);
+      return;
+    }
+    this.mod = mod;
     this.setData({
       statusBarHeight: getApp().globalData.statusBarHeight,
       moduleId: this.moduleId,
-      moduleName: this.moduleId === '1' ? '数一数' : '模块',
+      moduleName: mod.name,
     });
   },
 
@@ -25,7 +32,7 @@ Page({
   },
 
   buildNodes() {
-    const all = levels.getAllLevels(this.moduleId);
+    const all = this.mod.impl.levels.getAllLevels(this.moduleId);
     const nodes = all.map((l, i) => {
       const unlocked = storage.isLevelUnlocked(this.moduleId, l.id);
       const stars = storage.getLevelStars(this.moduleId, l.id);

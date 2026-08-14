@@ -58,6 +58,58 @@
       <view class="counter">已放入 {{view.filled}} / {{view.target}}</view>
     </view>
 
+    <!-- fillten：补满十格阵（可交互，初始已有物品） -->
+    <view wx:elif="{{view.type === 'fillten'}}">
+      <view class="ten-frame">
+        <view
+          wx:for="{{view.cells}}"
+          wx:key="index"
+          class="ten-cell {{item ? 'filled' : ''}}"
+          data-index="{{index}}"
+          bindtap="onCellTap"
+        >{{item ? view.item : ''}}</view>
+      </view>
+      <view class="counter">已有 {{view.filled}} 个，补到 {{view.target}}</view>
+    </view>
+
+    <!-- completen：补数（十格阵只展示，选项作答） -->
+    <view wx:elif="{{view.type === 'completen'}}">
+      <view class="ten-frame ten-frame-show">
+        <view
+          wx:for="{{view.cells}}"
+          wx:key="index"
+          class="ten-cell {{item ? 'filled' : ''}}"
+        >{{item ? view.item : ''}}</view>
+      </view>
+      <view class="ten-hint">还差 {{view.target - view.filled}} 个就凑满 10</view>
+    </view>
+
+    <!-- make10：凑十加法（十格阵 + 散放，选项作答） -->
+    <view wx:elif="{{view.type === 'make10'}}">
+      <view class="ten-frame ten-frame-show">
+        <view
+          wx:for="{{view.cells}}"
+          wx:key="index"
+          class="ten-cell {{item ? 'filled' : ''}}"
+        >{{item ? view.item : ''}}</view>
+      </view>
+      <view class="extra-row">
+        <text wx:for="{{view.extra}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+      </view>
+      <view class="ten-hint">先把 {{view.filled}} 凑成 10，再算剩下的</view>
+    </view>
+
+    <!-- split / pair：点两个数凑 10 -->
+    <view wx:elif="{{view.type === 'split' || view.type === 'pair'}}" class="pick-grid">
+      <view
+        wx:for="{{view.options}}"
+        wx:key="key"
+        class="pick-btn {{picked.key === item.key ? 'picked' : ''}} {{matched[item.key] ? 'matched' : ''}} {{shakeKey === item.key ? 'anim-shake' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onPickTap"
+      >{{item.label}}</view>
+    </view>
+
     <!-- feed：喂跳跳 -->
     <view wx:elif="{{view.type === 'feed'}}">
       <view class="feed-plate">

@@ -178,6 +178,68 @@
   animation: pop-in 0.25s ease;
 }
 
+/* 纯展示的十格阵（completen/make10） */
+.ten-frame-show {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ten-hint {
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #4ecdc4;
+  padding: 16rpx 0 8rpx;
+}
+
+/* make10 散放的物品 */
+.extra-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  padding: 20rpx 12rpx 4rpx;
+}
+
+/* split / pair：选两个数的大按钮 */
+.pick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+  padding: 20rpx 8rpx;
+}
+
+.pick-btn {
+  padding: 44rpx 0;
+  font-size: 64rpx;
+  font-weight: 900;
+  color: #2d3436;
+  text-align: center;
+  background: #ffffff;
+  border: 4rpx solid #d5e8e5;
+  border-radius: 28rpx;
+  box-shadow: 0 6rpx 16rpx rgba(45, 52, 54, 0.08);
+  transition: all 0.15s ease;
+}
+
+.pick-btn:active {
+  transform: scale(0.94);
+}
+
+.pick-btn.picked {
+  border-color: #4ecdc4;
+  background: rgba(78, 205, 196, 0.12);
+  color: #4ecdc4;
+  transform: scale(1.04);
+}
+
+.pick-btn.matched {
+  opacity: 0.35;
+  border-color: #51cf66;
+  color: #51cf66;
+  transform: scale(0.96);
+}
+
 /* feed 喂跳跳 */
 .feed-plate {
   padding: 20rpx;

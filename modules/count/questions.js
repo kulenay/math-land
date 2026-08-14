@@ -4,45 +4,14 @@
 // 语义题目（不含布局），布局由 renderers.js 负责。
 // ============================================
 
+const { randInt, shuffle, pickFrom, genOptions } = require('../../core/rand');
+
 // 通用物品池
 const ITEMS = ['🍎', '🍬', '🌟', '🐟', '🎈', '🍊', '🌸', '🐝', '🍄', '🐚'];
 const BUG = '🐛';
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 function pickItem() {
   return ITEMS[randInt(0, ITEMS.length - 1)];
-}
-
-/** 生成 4 个选项（含正确答案），邻近数字为主、远数字为辅。 */
-function genOptions(correct, spread = 3) {
-  const set = new Set([correct]);
-  let guard = 0;
-  while (set.size < 4 && guard < 60) {
-    guard++;
-    const opt = Math.random() > 0.5
-      ? correct + randInt(-2, 2)      // 邻近
-      : correct + randInt(-spread, spread); // 稍远
-    if (opt >= 1 && !set.has(opt)) set.add(opt);
-  }
-  // 兜底：直接补 1 ~ max(correct+5, 5) 范围
-  let fallback = Math.max(correct + 5, 5);
-  while (set.size < 4) {
-    const opt = randInt(1, fallback);
-    if (!set.has(opt)) set.add(opt);
-  }
-  return shuffle(Array.from(set));
 }
 
 /**

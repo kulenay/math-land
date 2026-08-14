@@ -5,9 +5,7 @@
 //   - 星级 = 首答正确率（3 星全对 / 2 星 >=80% / 1 星通关）
 //   - 构建题（十格阵 / 喂跳跳）无对错，完成即成功；中途改过则不计首答
 // ============================================
-const levels = require('../../modules/count/levels');
-const questions = require('../../modules/count/questions');
-const renderers = require('../../modules/count/renderers');
+const modules = require('../../modules/index');
 const storage = require('../../core/storage');
 const sound = require('../../core/sound');
 const star = require('../../core/star');
@@ -26,6 +24,9 @@ Page({
     locked: false,
     wrongOptions: {},   // 已试错的选项 key -> true
     plateHas: {},       // feed：虫索引 -> true（在盘上）
+    picked: null,       // pair/split：第一次选中的 { key, value }
+    matched: {},        // pair：已配对的选项 key -> true
+    shakeKey: null,     // 配对失败的抖动提示 key
     feedback: null,     // { type: 'correct'|'wrong', text }
     frogMood: '😊',
     frogText: '',
@@ -39,16 +40,23 @@ Page({
     sound.init();
     const moduleId = options.module || '1';
     const levelId = parseInt(options.level || '1', 10);
-    const level = levels.getLevel(moduleId, levelId);
+    const mod = modules.get(moduleId);
+    if (!mod) {
+      wx.showToast({ title: '模块不存在', icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 900);
+      return;
+    }
+    const level = mod.impl.levels.getLevel(moduleId, levelId);
     if (!level) {
       wx.showToast({ title: '关卡不存在', icon: 'none' });
       setTimeout(() => wx.navigateBack(), 900);
       return;
     }
     this.moduleId = moduleId;
+    this.mod = mod;
     this.level = level;
     this.total = level.questionCount;
-    this.qs = questions.generateLevel(level);
+    this.qs = mod.impl.questions.generateLevel(level);
     this.qIndex = 0;
     this.firstCorrect = 0;
     this.setData({
@@ -64,10 +72,13 @@ Page({
 
   showQuestion() {
     const q = this.qs[this.qIndex];
-    const view = renderers.buildView(q);
-    const isChoice = q.type !== 'tenframe' && q.type !== 'feed' && q.type !== 'match';
+    const view = this.mod.impl.renderers.buildView(q);
+    // 选择题白名单（渲染底部选项区）；其余走构建/点选交互
+    const CHOICE_TYPES = ['scatter', 'subitize', 'compare', 'group', 'completen', 'make10'];
+    const isChoice = CHOICE_TYPES.includes(q.type);
     this.q = q;
     this.removedOnce = false;
+    this._pickMistake = false;
     this.setData({
       view,
       isChoice,
@@ -75,7 +86,12 @@ Page({
       locked: false,
       wrongOptions: {},
       plateHas: {},
+      picked: null,
+      matched: {},
+      shakeKey: null,
       feedback: null,
+      result: null,
+      starList: [],
       frogMood: '😊',
       frogText: q.type === 'feed' ? '点虫虫放进盘子里' : '来试试吧！',
       progress: Math.round((this.qIndex / this.total) * 100),
@@ -145,7 +161,9 @@ Page({
     this.setData({ view: { ...view, cells, filled } });
 
     if (filled === view.target) {
-      this.advance(!this.removedOnce);
+      const isFirstTry = !this.removedOnce;
+      if (isFirstTry) this.firstCorrect++;
+      this.advance(isFirstTry);
     }
   },
 
@@ -170,8 +188,72 @@ Page({
     this.setData({ view: { ...view, plate }, plateHas });
 
     if (plate.length === view.target) {
-      this.advance(!this.removedOnce);
+      const isFirstTry = !this.removedOnce;
+      if (isFirstTry) this.firstCorrect++;
+      this.advance(isFirstTry);
     }
+  },
+
+  // ---------- pair/split：点两个数 ----------
+  onPickTap(e) {
+    if (this.data.locked) return;
+    const key = String(e.currentTarget.dataset.key);
+    const q = this.q;
+    if (q.type === 'pair' && this.data.matched[key]) return; // 已配对不可再点
+    const picked = this.data.picked;
+
+    // 第一次选择 / 取消选择
+    if (!picked) {
+      this.setData({ picked: { key, value: parseInt(key, 10) } });
+      sound.play('click');
+      return;
+    }
+    if (picked.key === key) {
+      this.setData({ picked: null });
+      sound.play('click');
+      return;
+    }
+
+    const sum = picked.value + parseInt(key, 10);
+
+    if (q.type === 'pair') {
+      if (sum === 10) {
+        const matched = { ...this.data.matched, [picked.key]: true, [key]: true };
+        sound.play('pop');
+        this.setData({ picked: null, matched });
+        const allMatched = q.options.every((o) => matched[String(o)]);
+        if (allMatched) {
+          const isFirstTry = !this._pickMistake;
+          if (isFirstTry) this.firstCorrect++;
+          setTimeout(() => this.advance(isFirstTry), 400);
+        }
+      } else {
+        this.pickWrong(picked.key, '它们凑不成 10 哦', '找找加起来等于 10 的两个数');
+      }
+    } else if (sum === 10) {
+      // split：两数相加 = 10 即答对
+      const isFirstTry = !this._pickMistake;
+      if (isFirstTry) this.firstCorrect++;
+      this.advance(isFirstTry);
+    } else {
+      this.pickWrong(picked.key, '再想想哪两个数凑成 10', '10 可以分成哪两个数？');
+    }
+  },
+
+  // 选两数答错：抖动提示 + 重置选择
+  pickWrong(shakeKey, text, frogText) {
+    this._pickMistake = true;
+    sound.play('wrong');
+    this.setData({
+      picked: null,
+      shakeKey,
+      feedback: { type: 'wrong', text },
+      frogMood: '🤗',
+      frogText,
+    });
+    // 只清抖动标记；错误 feedback 由下一次交互或 showQuestion/advance 自然覆盖，
+    // 避免旧定时器提前清掉后续的正确反馈（竞态）
+    setTimeout(() => this.setData({ shakeKey: null }), 700);
   },
 
   // ---------- 答对推进 ----------
@@ -198,7 +280,7 @@ Page({
     const stars = star.computeStars(this.firstCorrect, this.total);
     storage.saveLevelResult(this.moduleId, this.level.id, stars, this.firstCorrect);
     sound.play('win');
-    const all = levels.getAllLevels(this.moduleId);
+    const all = this.mod.impl.levels.getAllLevels(this.moduleId);
     const hasNext = this.level.id < all.length;
     this.setData({
       locked: true,
@@ -238,7 +320,7 @@ Page({
 
   onRetry() {
     this.clearAutoJump();
-    this.qs = questions.generateLevel(this.level);
+    this.qs = this.mod.impl.questions.generateLevel(this.level);
     this.qIndex = 0;
     this.firstCorrect = 0;
     this.showQuestion();

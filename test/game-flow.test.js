@@ -42,19 +42,35 @@ function assert(name, cond, extra) {
 /** 答当前题：点正确选项（构建题直接模拟到目标） */
 async function answerCurrent(inst, correct) {
   const view = inst.data.view;
-  if (view.type === 'tenframe' || view.type === 'feed') {
-    // 构建题：模拟填到目标（无取出）
-    const target = view.target;
-    for (let n = 0; n < target; n++) {
-      if (view.type === 'tenframe') {
-        const idx = view.cells.findIndex((c) => c === 0);
-        inst.onCellTap.call(inst, { currentTarget: { dataset: { index: idx } } });
-      } else {
-        const idx = view.bugs.findIndex((_, i) => !view.plate.includes(i));
-        inst.onBugTap.call(inst, { currentTarget: { dataset: { index: idx } } });
-      }
+  if (view.type === 'tenframe' || view.type === 'fillten') {
+    // 构建题：点击空格补到目标（无取出，need = target - 初始已填）
+    // 注意：每次循环必须重新读取最新 view，否则用旧 cells 会反复点同一格
+    const need = view.target - view.filled;
+    for (let n = 0; n < need; n++) {
+      const cur = inst.data.view;
+      const idx = cur.cells.findIndex((c) => c === 0);
+      inst.onCellTap.call(inst, { currentTarget: { dataset: { index: idx } } });
       await sleep(60);
     }
+  } else if (view.type === 'feed') {
+    // 喂跳跳：点虫子放盘到目标
+    const target = view.target;
+    for (let n = 0; n < target; n++) {
+      const cur = inst.data.view;
+      const idx = cur.bugs.findIndex((_, i) => !cur.plate.includes(i));
+      inst.onBugTap.call(inst, { currentTarget: { dataset: { index: idx } } });
+      await sleep(60);
+    }
+  } else if (view.type === 'pair') {
+    // 依次配对所有 pairs
+    for (const [a, b] of inst.q.pairs) {
+      inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(a) } } });
+      await sleep(30);
+      inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(b) } } });
+      await sleep(30);
+    }
+    await sleep(1500); // 配完最后一对的 advance 延迟 + 推进
+    return;
   } else if (view.type === 'match') {
     // match 是点堆交互，按 answerIndex 判定
     const key = correct ? String(inst.q.answerIndex) : '0';
@@ -110,6 +126,40 @@ async function answerCurrent(inst, correct) {
   const d = newInst();
   d.onLoad.call(d, { module: '1', level: '99' });
   assert('非法关卡不崩溃', true);
+  const e2 = newInst();
+  e2.onLoad.call(e2, { module: '9', level: '1' });
+  assert('非法模块不崩溃', true);
+
+  // 场景 E：凑十魔法第 1 关（fillten 构建题）
+  console.log('== 场景 E：凑十魔法 fillten ==');
+  const e = newInst();
+  e.onLoad.call(e, { module: '2', level: '1' });
+  for (let i = 0; i < 6; i++) await answerCurrent(e, true);
+  assert('fillten 通关 result 弹出', e.data.result !== null);
+  assert('fillten 全首答 firstCorrect=6', e.firstCorrect === 6);
+  assert('fillten 3 星', e.data.starList.length === 3);
+  assert('模块2存档已写入', store.ml_progress_v1 && store.ml_progress_v1.modules['2'].stars['1'] === 3);
+
+  // 场景 F：凑十魔法第 3 关（pair 配对）
+  console.log('== 场景 F：凑十魔法 pair ==');
+  const f = newInst();
+  f.onLoad.call(f, { module: '2', level: '3' });
+  for (let i = 0; i < 6; i++) await answerCurrent(f, true);
+  assert('pair 通关 result 弹出', f.data.result !== null);
+  assert('pair 全对 firstCorrect=6', f.firstCorrect === 6);
+
+  // 场景 G：通关后点"再玩一次"（曾因 questions 变量未定义必崩）
+  console.log('== 场景 G：onRetry ==');
+  const g = newInst();
+  g.onLoad.call(g, { module: '1', level: '1' });
+  for (let i = 0; i < 6; i++) await answerCurrent(g, true);
+  assert('G 通关', g.data.result !== null);
+  try {
+    g.onRetry.call(g);
+    assert('onRetry 不崩溃且重置', g.data.result === null && g.qIndex === 0 && g.firstCorrect === 0);
+  } catch (err) {
+    assert('onRetry 不崩溃且重置', false, err.message);
+  }
 
   console.log('\n结果: ' + pass + ' 通过, ' + fail + ' 失败');
   process.exit(fail ? 1 : 0);

@@ -79,8 +79,9 @@ function resetAll() {
 function unlockAll(moduleId) {
   const data = load();
   const m = data.modules[String(moduleId)] || { stars: {}, completed: [], firstTry: {} };
-  const { getAllLevels } = require('../modules/count/levels');
-  getAllLevels(moduleId).forEach((l) => {
+  const mod = require('../modules/index').get(moduleId);
+  if (!mod) return;
+  mod.impl.levels.getAllLevels(moduleId).forEach((l) => {
     m.stars[String(l.id)] = 3;
     if (!m.completed.includes(l.id)) m.completed.push(l.id);
     m.firstTry[String(l.id)] = m.firstTry[String(l.id)] || 6;

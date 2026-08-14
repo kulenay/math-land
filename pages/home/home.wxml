@@ -12,11 +12,17 @@
   <view class="home-title">选择探险区域</view>
 
   <view class="module-grid">
-    <view class="module-card" bindtap="onModuleTap" data-module="1">
-      <view class="module-icon">👀</view>
-      <view class="module-name">数一数</view>
-      <view class="module-desc">感知数量</view>
-      <view class="module-stars">⭐ {{module1Stars}}</view>
+    <view
+      class="module-card"
+      wx:for="{{moduleCards}}"
+      wx:key="id"
+      bindtap="onModuleTap"
+      data-module="{{item.id}}"
+    >
+      <view class="module-icon">{{item.emoji}}</view>
+      <view class="module-name">{{item.name}}</view>
+      <view class="module-desc">{{item.desc}}</view>
+      <view class="module-stars">⭐ {{item.stars}}</view>
     </view>
 
     <view class="module-card locked" wx:for="{{lockedModules}}" wx:key="id">
