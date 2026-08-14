@@ -258,23 +258,11 @@ const App = {
   updateHomeStars() {
     document.getElementById('total-stars').textContent = this.getTotalStars();
 
-    // 更新模块解锁状态
-    const moduleProgress = {};
-    for (let i = 1; i <= 5; i++) {
-      moduleProgress[i] = this.getModuleProgress(i);
-    }
-
-    // 每完成3关解锁下一模块
+    // 全部解锁（测试模式）
     document.querySelectorAll('.module-card').forEach(card => {
-      const moduleId = parseInt(card.dataset.module);
-      if (moduleId === 1) return; // 模块一始终解锁
-
-      const prevModuleComplete = Object.keys(moduleProgress[moduleId - 1] || {}).length >= 3;
-      if (prevModuleComplete) {
-        card.classList.remove('locked');
-        const lock = card.querySelector('.module-lock');
-        if (lock) lock.remove();
-      }
+      card.classList.remove('locked');
+      const lock = card.querySelector('.module-lock');
+      if (lock) lock.remove();
     });
   }
 };
