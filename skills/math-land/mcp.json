@@ -1,0 +1,159 @@
+{
+  "apis": [
+    {
+      "name": "getProgress",
+      "description": "读取某个学习模块（数一数/凑十魔法）的关卡进度，返回每关星级、是否解锁和模块总星数，用于了解孩子学到哪里",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string", "description": "模块编号：1=数一数，2=凑十魔法，不传默认 1" }
+        }
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string" },
+          "totalStars": { "type": "number" },
+          "levels": { "type": "array" }
+        }
+      }
+    },
+    {
+      "name": "getLevelInfo",
+      "description": "查询指定模块某关卡的配置信息（关卡名、说明、题数、题型与数字范围），用于向孩子介绍关卡内容",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string", "description": "模块编号：1=数一数，2=凑十魔法" },
+          "levelId": { "type": "number", "description": "关卡编号（从 1 开始）" }
+        },
+        "required": ["moduleId", "levelId"]
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string" },
+          "levelId": { "type": "number" },
+          "name": { "type": "string" },
+          "desc": { "type": "string" },
+          "questionCount": { "type": "number" },
+          "types": { "type": "array" },
+          "min": { "type": "number" },
+          "max": { "type": "number" }
+        }
+      }
+    },
+    {
+      "name": "generateQuestion",
+      "description": "为指定模块的关卡生成一道数学题（含正确答案与选项），可用于给孩子出题练习或讲解题型",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string", "description": "模块编号：1=数一数，2=凑十魔法" },
+          "levelId": { "type": "number", "description": "关卡编号（从 1 开始）" }
+        },
+        "required": ["moduleId", "levelId"]
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string" },
+          "levelId": { "type": "number" },
+          "question": { "type": "object" }
+        }
+      }
+    },
+    {
+      "name": "checkAnswer",
+      "description": "判定孩子的作答是否正确，传入题目对象和答案（选择题为数字/左右边，凑十配对为两个数组成的数组，构建题为填充数量），返回对错",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "question": { "type": "object", "description": "由生成题目接口返回的题目对象" },
+          "answer": { "type": "object", "description": "孩子的答案：选择题为数字或 left/right，凑十配对为 [数1, 数2]，构建题为数量" }
+        },
+        "required": ["question", "answer"]
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "correct": { "type": "boolean" },
+          "questionType": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "computeStars",
+      "description": "按首答正确题数和总题数计算本次闯关应得的星级（全对 3 星，正确率不低于 80% 得 2 星，通关得 1 星）",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "firstCorrect": { "type": "number", "description": "首答正确的题数" },
+          "total": { "type": "number", "description": "总题数（大于 0）" }
+        },
+        "required": ["firstCorrect", "total"]
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "stars": { "type": "number" },
+          "firstCorrect": { "type": "number" },
+          "total": { "type": "number" }
+        }
+      }
+    },
+    {
+      "name": "saveLevelResult",
+      "description": "保存某关卡的通关成绩（星级与首答正确题数），自动保留历史最高星级，返回本次星级与历史最佳",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string", "description": "模块编号：1=数一数，2=凑十魔法" },
+          "levelId": { "type": "number", "description": "关卡编号" },
+          "stars": { "type": "number", "description": "本次获得的星级（1~3）" },
+          "firstCorrect": { "type": "number", "description": "首答正确的题数（可选）" }
+        },
+        "required": ["moduleId", "levelId", "stars"]
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "moduleId": { "type": "string" },
+          "levelId": { "type": "number" },
+          "stars": { "type": "number" },
+          "bestStars": { "type": "number" }
+        }
+      }
+    },
+    {
+      "name": "toggleSound",
+      "description": "查询或切换游戏的音效开关状态，不传 on 则只查询当前状态",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "on": { "type": "boolean", "description": "要设置的状态：true 开启音效，false 关闭；不传则只查询" }
+        }
+      },
+      "outputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "soundOn": { "type": "boolean" }
+        }
+      }
+    }
+  ]
+}

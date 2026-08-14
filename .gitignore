@@ -3,3 +3,4 @@ __pycache__/
 project.private.config.json
 .DS_Store
 .reasonix/
+cli-agent-run/

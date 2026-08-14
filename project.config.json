@@ -36,13 +36,42 @@
   "simulatorPluginLibVersion": {},
   "packOptions": {
     "ignore": [
-      { "type": "folder", "value": "web-prototype" },
-      { "type": "folder", "value": "test" },
-      { "type": "folder", "value": "tools" },
-      { "type": "folder", "value": ".reasonix" },
-      { "type": "file", "value": "README.md" }
+      {
+        "type": "folder",
+        "value": "web-prototype"
+      },
+      {
+        "type": "folder",
+        "value": "test"
+      },
+      {
+        "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "folder",
+        "value": ".reasonix"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "folder",
+        "value": "cli-agent-run"
+      }
     ],
-    "include": []
+    "include": [
+      {
+        "type": "folder",
+        "value": "skills"
+      }
+    ]
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "watchOptions": {
+    "ignore": [
+      "cli-agent-run/**/*"
+    ]
+  }
 }

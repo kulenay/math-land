@@ -56,10 +56,13 @@ math-land/
 │   ├── sound.js               # 音效管理
 │   └── star.js                # 星级判定
 ├── modules/
-│   └── count/                 # 模块一「数一数」
-│       ├── levels.js          # 关卡配置
-│       ├── questions.js       # 题目生成器
-│       └── renderers.js       # 题型渲染器（7 种题型引擎）
+│   ├── count/                 # 模块一「数一数」
+│   ├── make-ten/              # 模块二「凑十魔法」
+│   └── index.js               # 模块注册表
+├── skills/math-land/          # 小程序 AI 技能分包（wx.modelContext）
+│   ├── apis/                  # 7 个原子接口（进度/出题/判定/星级/存档/音效）
+│   ├── utils/                 # 分包内自持逻辑（忠实搬移自主包）
+│   ├── index.js / mcp.json / SKILL.md
 ├── pages/
 │   ├── splash/                # 启动页
 │   ├── home/                  # 主页（模块选择）

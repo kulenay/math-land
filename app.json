@@ -12,5 +12,21 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "agent": {
+    "skills": [
+      {
+        "name": "数感探索乐园学习能力",
+        "description": "查看闯关进度、按关卡出题、判定作答、结算并保存星级",
+        "path": "skills/math-land"
+      }
+    ]
+  },
+  "subPackages": [
+    {
+      "root": "skills",
+      "independent": true,
+      "pages": []
+    }
+  ]
 }
