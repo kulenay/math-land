@@ -1,0 +1,631 @@
+/* ============================================
+   模块二~五 共用样式
+   ============================================ */
+
+/* ========== 凑十魔法 ========== */
+.pack-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.box-zone {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.box-label {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.box-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.box-item {
+  font-size: 24px;
+  animation: pop 0.3s ease;
+}
+
+.box-count {
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin-top: 8px;
+}
+
+.bundle-zone {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bundle {
+  background: linear-gradient(135deg, #FFF3BF 0%, #FFE8CC 100%);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.bundle-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin-top: 4px;
+}
+
+.loose-zone {
+  background: #F8F9FA;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  min-height: 60px;
+}
+
+.loose-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.pack-item {
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pack-item:active {
+  transform: scale(1.2);
+}
+
+.pack-item.packed {
+  opacity: 0.3;
+  transform: scale(0.8);
+}
+
+/* ========== 凑十视觉 ========== */
+.ten-frame-visual {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 16px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* ========== 拆分视觉 ========== */
+.split-visual {
+  width: 100%;
+}
+
+.split-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.split-item {
+  font-size: 28px;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.split-item.left {
+  background: rgba(78, 205, 196, 0.2);
+  border: 2px solid var(--color-secondary);
+}
+
+.split-item.right {
+  background: rgba(255, 155, 80, 0.2);
+  border: 2px solid var(--color-primary);
+}
+
+.split-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.split-left, .split-right {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.split-left { color: var(--color-secondary); }
+.split-right { color: var(--color-primary); }
+
+.question-sub {
+  font-size: 16px;
+  color: var(--color-text-light);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ========== 几十和几 ========== */
+.tens-ones-visual {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tens-group, .ones-group {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 120px;
+}
+
+.tens-label, .ones-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.tens-items, .ones-items {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bundle-mini { font-size: 32px; }
+.loose-mini { font-size: 24px; }
+
+/* ========== 积木塔 ========== */
+.tower-visual {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 4px;
+}
+
+.tower-layer {
+  display: flex;
+  justify-content: center;
+}
+
+.tower-block {
+  background: linear-gradient(135deg, #FFE8CC 0%, #FFF3BF 100%);
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.tower-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-left: 4px;
+}
+
+.tower-total {
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ========== 位值 - 数字房子 ========== */
+.number-house {
+  padding: 20px;
+}
+
+.house-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.house {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 120px;
+  border: 3px solid var(--color-border);
+}
+
+.room-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.room-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.room-emoji {
+  font-size: 20px;
+  word-break: break-all;
+}
+
+/* ========== 积木对应 ========== */
+.blocks-visual {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.blocks-tens, .blocks-ones {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 120px;
+}
+
+.blocks-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.blocks-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.block-ten { font-size: 32px; }
+.block-one { font-size: 24px; }
+
+/* ========== 数字拆解器 ========== */
+.number-big {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.split-arrow {
+  font-size: 24px;
+  text-align: center;
+  margin: 8px 0;
+  color: var(--color-text-light);
+}
+
+.split-parts {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.split-part {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 80px;
+}
+
+.part-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.part-label {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.split-plus {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-light);
+}
+
+/* ========== 过河冒险 ========== */
+.river-visual {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.river-side {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 100px;
+}
+
+.side-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+
+.side-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+}
+
+.river-item { font-size: 20px; }
+.river-bridge { font-size: 32px; }
+
+.carry-hint, .borrow-hint {
+  background: linear-gradient(135deg, #FFF3BF 0%, #FFE8CC 100%);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.more-items {
+  font-size: 14px;
+  color: var(--color-text-light);
+  font-weight: 600;
+}
+
+/* ========== 减法视觉 ========== */
+.subtraction-visual {
+  width: 100%;
+}
+
+.sub-all, .sub-remaining {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 8px;
+}
+
+.sub-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+
+.sub-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+}
+
+.sub-item {
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.sub-item.removed {
+  opacity: 0.2;
+  transform: scale(0.7);
+  text-decoration: line-through;
+}
+
+.sub-item.remaining {
+  color: var(--color-success);
+}
+
+.sub-arrow {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin: 4px 0;
+}
+
+/* ========== 购物乐园 ========== */
+.money-display {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.money-item.big {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 24px 40px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.money-emoji { font-size: 48px; display: block; }
+.money-value { font-size: 24px; font-weight: 700; color: var(--color-primary); }
+
+.convert-visual {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.convert-from, .convert-to {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.convert-emoji { font-size: 36px; }
+.convert-label { font-size: 18px; font-weight: 700; color: var(--color-primary); }
+.convert-arrow { font-size: 28px; color: var(--color-text-light); }
+
+.convert-slot {
+  display: inline-block;
+  font-size: 20px;
+  margin: 2px;
+}
+
+.more-slots {
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+.shop-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.product-display {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px 32px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.product-emoji { font-size: 48px; }
+.product-price { font-size: 20px; font-weight: 700; color: var(--color-primary); }
+
+.wallet-display {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.wallet-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.wallet-items {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.wallet-coin {
+  background: linear-gradient(135deg, #FFF3BF 0%, #FFE8CC 100%);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.wallet-total {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-top: 8px;
+}
+
+.change-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.change-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.change-item, .change-paid {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.change-emoji { font-size: 32px; }
+.change-price { font-size: 16px; font-weight: 700; color: var(--color-primary); }
+
+.change-formula {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  background: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.shopping-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.shopping-list {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.shopping-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+}
+
+.shopping-item:last-child { border-bottom: none; }
+
+.shopping-total {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+  padding: 12px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}

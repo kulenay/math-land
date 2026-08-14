@@ -3,7 +3,7 @@
    ============================================ */
 
 const App = {
-  modules: [Module1],
+  modules: [Module1, Module2, Module3, Module4, Module5],
   currentModule: null,
   currentLevel: null,
   progress: {},
@@ -91,7 +91,8 @@ const App = {
 
   // 打开模块
   openModule(moduleId) {
-    this.currentModule = this.modules.find(m => m.levels[0]?.id > (moduleId - 1) * 5);
+    // moduleId 1-5 对应 modules 数组索引 0-4
+    this.currentModule = this.modules[moduleId - 1];
     if (!this.currentModule) return;
 
     // 更新关卡页标题
@@ -107,7 +108,8 @@ const App = {
   renderLevelPath() {
     const path = document.getElementById('level-path');
     const module = this.currentModule;
-    const progress = this.getModuleProgress(1);
+    const moduleId = this.modules.indexOf(module) + 1;
+    const progress = this.getModuleProgress(moduleId);
 
     let html = '';
 
@@ -142,6 +144,7 @@ const App = {
   // 开始关卡
   startLevel(levelId) {
     this.currentLevel = this.currentModule.levels.find(l => l.id === levelId);
+    if (!this.currentLevel) return;
     this.currentModule.startLevel(levelId);
   },
 
@@ -256,14 +259,18 @@ const App = {
     document.getElementById('total-stars').textContent = this.getTotalStars();
 
     // 更新模块解锁状态
-    const module1Stars = this.getModuleProgress(1);
-    const module1Complete = Object.keys(module1Stars).length >= 3; // 完成3关解锁下一模块
+    const moduleProgress = {};
+    for (let i = 1; i <= 5; i++) {
+      moduleProgress[i] = this.getModuleProgress(i);
+    }
 
+    // 每完成3关解锁下一模块
     document.querySelectorAll('.module-card').forEach(card => {
       const moduleId = parseInt(card.dataset.module);
       if (moduleId === 1) return; // 模块一始终解锁
 
-      if (module1Complete || moduleId <= 1) {
+      const prevModuleComplete = Object.keys(moduleProgress[moduleId - 1] || {}).length >= 3;
+      if (prevModuleComplete) {
         card.classList.remove('locked');
         const lock = card.querySelector('.module-lock');
         if (lock) lock.remove();
