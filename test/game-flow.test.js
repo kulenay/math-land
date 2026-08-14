@@ -61,6 +61,15 @@ async function answerCurrent(inst, correct) {
       inst.onBugTap.call(inst, { currentTarget: { dataset: { index: idx } } });
       await sleep(60);
     }
+  } else if (view.type === 'split') {
+    // split：点 answerPair 的两个数凑 10
+    const [a, b] = inst.q.answerPair;
+    inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(a) } } });
+    await sleep(30);
+    inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(b) } } });
+    await sleep(30);
+    await sleep(1000); // advance 900ms
+    return;
   } else if (view.type === 'pair') {
     // 依次配对所有 pairs
     for (const [a, b] of inst.q.pairs) {
@@ -160,6 +169,15 @@ async function answerCurrent(inst, correct) {
   } catch (err) {
     assert('onRetry 不崩溃且重置', false, err.message);
   }
+
+  // 场景 H：凑十魔法第 2 关（split 选两数）
+  console.log('== 场景 H：凑十魔法 split ==');
+  const h = newInst();
+  h.onLoad.call(h, { module: '2', level: '2' });
+  for (let i = 0; i < 6; i++) await answerCurrent(h, true);
+  assert('split 通关 result 弹出', h.data.result !== null);
+  assert('split 全首答 firstCorrect=6', h.firstCorrect === 6);
+  assert('split 3 星', h.data.starList.length === 3);
 
   console.log('\n结果: ' + pass + ' 通过, ' + fail + ' 失败');
   process.exit(fail ? 1 : 0);

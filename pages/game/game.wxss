@@ -161,7 +161,8 @@
 }
 
 .ten-cell {
-  aspect-ratio: 1;
+  /* 兼容低版本 WebView：不用 aspect-ratio，用固定高度保证正方形 */
+  height: 96rpx;
   border: 3rpx solid #d5e8e5;
   border-radius: 14rpx;
   display: flex;
@@ -482,7 +483,11 @@
 /* ---------- 结算浮层 ---------- */
 .result-mask {
   position: fixed;
-  inset: 0;
+  /* 兼容低版本 WebView：不用 inset，用四边定位 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(45, 52, 54, 0.55);
   display: flex;
   align-items: center;
