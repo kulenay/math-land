@@ -3,7 +3,10 @@
     "pages/splash/splash",
     "pages/home/home",
     "pages/map/map",
-    "pages/game/game"
+    "pages/game/game",
+    "pages/wallet/wallet",
+    "pages/wallet/settings",
+    "pages/ai/ai"
   ],
   "window": {
     "navigationStyle": "custom",

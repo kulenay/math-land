@@ -19,8 +19,11 @@ function assert(name, cond, extra) {
 console.log('== modules 注册表 ==');
 assert('get(1) 数一数', modules.get('1') && modules.get('1').name === '数一数');
 assert('get(2) 凑十魔法', modules.get('2') && modules.get('2').name === '凑十魔法');
+assert('get(3) 生活大冒险', modules.get('3') && modules.get('3').name === '生活大冒险');
+assert('get(4) 数字好朋友', modules.get('4') && modules.get('4').name === '数字好朋友');
+assert('get(5) 时间与钱币', modules.get('5') && modules.get('5').name === '时间与钱币');
 assert('get(9) 不存在返回 null', modules.get('9') === null);
-assert('getAll 有 2 个已开发模块', modules.getAll().length === 2);
+assert('getAll 有 5 个已开发模块', modules.getAll().length === 5);
 assert('模块接口完整', ['levels', 'questions', 'renderers'].every((k) => makeTen[k]));
 
 // ---------- levels ----------

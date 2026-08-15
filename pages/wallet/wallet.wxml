@@ -1,0 +1,114 @@
+<view class="wallet-page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view class="btn-back" bindtap="onBack">←</view>
+    <view class="topbar-title">数字钱包</view>
+    <view class="btn-back" bindtap="onSettings">🔒</view>
+  </view>
+
+  <!-- 余额卡 -->
+  <view class="balance-card">
+    <view class="balance-label">💰 我的零钱</view>
+    <view class="balance-num">{{balanceText}}</view>
+    <view class="balance-unit">元</view>
+    <view class="balance-tip">完成任务挣钱，攒起来吧！</view>
+  </view>
+
+  <!-- 储蓄罐（复利） -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">🏦 储蓄罐</view>
+      <view class="card-badge">利息 {{interestRate}}%/天</view>
+    </view>
+    <view class="savings-row">
+      <view class="savings-num">{{savingsText}} 元</view>
+    </view>
+
+    <!-- 存钱 -->
+    <view class="money-op">
+      <view class="op-label">存钱</view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="onSaveStep" data-delta="-500">-5</view>
+        <view class="step-btn" bindtap="onSaveStep" data-delta="-100">-1</view>
+        <view class="step-value">{{saveAmount / 100}} 元</view>
+        <view class="step-btn" bindtap="onSaveStep" data-delta="100">+1</view>
+        <view class="step-btn" bindtap="onSaveStep" data-delta="500">+5</view>
+      </view>
+      <view class="op-btns">
+        <view class="op-btn" bindtap="onSaveAll">全部存入</view>
+        <view class="op-btn primary" bindtap="onDoSave">存入</view>
+      </view>
+    </view>
+
+    <!-- 取钱 -->
+    <view class="money-op">
+      <view class="op-label">取钱</view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="onWithdrawStep" data-delta="-500">-5</view>
+        <view class="step-btn" bindtap="onWithdrawStep" data-delta="-100">-1</view>
+        <view class="step-value">{{withdrawAmount / 100}} 元</view>
+        <view class="step-btn" bindtap="onWithdrawStep" data-delta="100">+1</view>
+        <view class="step-btn" bindtap="onWithdrawStep" data-delta="500">+5</view>
+      </view>
+      <view class="op-btns">
+        <view class="op-btn" bindtap="onWithdrawAll">全部取出</view>
+        <view class="op-btn primary" bindtap="onDoWithdraw">取出</view>
+      </view>
+    </view>
+
+    <view class="interest-tip">💡 复利小课堂：钱放在储蓄罐里，每天长出 {{interestRate}}% 利息，存得越久长得越多——这就是复利！</view>
+  </view>
+
+  <!-- 今日任务 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">🧹 今日任务</view>
+      <view class="card-badge">每个任务每天一次</view>
+    </view>
+    <view
+      wx:for="{{tasks}}"
+      wx:key="id"
+      class="task-row {{item.doneToday ? 'done' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="onTaskTap"
+    >
+      <view class="task-emoji">{{item.emoji}}</view>
+      <view class="task-name">{{item.name}}</view>
+      <view class="task-amount">{{item.amountText}}</view>
+      <view class="task-btn">{{item.doneToday ? '✅' : '完成'}}</view>
+    </view>
+    <view wx:if="{{!tasks.length}}" class="empty-tip">还没有任务，让爸爸妈妈在设置里添加吧</view>
+  </view>
+
+  <!-- 消费 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">🎮 想花钱</view>
+      <view class="card-badge">点一下，确认后扣钱</view>
+    </view>
+    <view
+      wx:for="{{spends}}"
+      wx:key="id"
+      class="task-row"
+      data-id="{{item.id}}"
+      bindtap="onSpendTap"
+    >
+      <view class="task-emoji">{{item.emoji}}</view>
+      <view class="task-name">{{item.name}}</view>
+      <view class="task-amount spend">{{item.amountText}}</view>
+      <view class="task-btn spend-btn">花</view>
+    </view>
+    <view wx:if="{{!spends.length}}" class="empty-tip">还没有消费项，让爸爸妈妈在设置里添加吧</view>
+  </view>
+
+  <!-- 历史 -->
+  <view class="card" wx:if="{{history.length}}">
+    <view class="card-head">
+      <view class="card-title">📜 最近记录</view>
+    </view>
+    <view wx:for="{{history}}" wx:key="index" class="history-row">
+      <view class="history-desc">{{item.desc}}</view>
+      <view class="history-time">{{item.timeText}}</view>
+      <view class="history-amount {{item.type === 'spend' || item.type === 'save' ? 'minus' : 'plus'}}">{{item.amountText}}</view>
+    </view>
+  </view>
+</view>

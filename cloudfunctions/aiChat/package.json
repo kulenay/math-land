@@ -1,0 +1,9 @@
+{
+  "name": "aiChat",
+  "version": "1.0.0",
+  "description": "数感探索乐园 - AI 互动转发云函数（OpenAI 兼容，默认 GLM-5.2）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

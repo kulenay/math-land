@@ -21,6 +21,27 @@ const registry = {
     desc: '十进制',
     impl: require('./make-ten/index.js'),
   },
+  '3': {
+    id: 3,
+    name: '生活大冒险',
+    emoji: '🏡',
+    desc: '生活里的数',
+    impl: require('./life/index.js'),
+  },
+  '4': {
+    id: 4,
+    name: '数字好朋友',
+    emoji: '🧩',
+    desc: '数字间的关系',
+    impl: require('./friend/index.js'),
+  },
+  '5': {
+    id: 5,
+    name: '时间与钱币',
+    emoji: '⏰',
+    desc: '认识钟表和钱币',
+    impl: require('./clock/index.js'),
+  },
 };
 
 function get(moduleId) {

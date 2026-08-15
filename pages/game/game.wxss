@@ -485,13 +485,43 @@
   pointer-events: none;
 }
 
+/* 精灵庆祝版：竖排大卡片 */
+.feedback.feedback-sprite {
+  flex-direction: column;
+  gap: 10rpx;
+  padding: 26rpx 48rpx;
+  border-radius: 32rpx;
+  text-align: center;
+  min-width: 420rpx;
+}
+
 .feedback-emoji {
   font-size: 56rpx;
+}
+
+.feedback-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
 }
 
 .feedback-text {
   font-size: 34rpx;
   font-weight: 800;
+}
+
+.sprite-meta {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #4ecdc4;
+}
+
+.sprite-line {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #95a5a6;
+  max-width: 420rpx;
 }
 
 .feedback-correct .feedback-text {
@@ -569,4 +599,470 @@
   justify-content: center;
   gap: 20rpx;
   margin-top: 24rpx;
+}
+
+/* ---------- scatter 新交互：框选计数 ---------- */
+.scatter-select-rect {
+  position: absolute;
+  border: 3rpx dashed #4ecdc4;
+  background: rgba(78, 205, 196, 0.12);
+  border-radius: 8rpx;
+  pointer-events: none;
+  z-index: 10;
+  transition: all 0.05s ease;
+}
+
+.scatter-select-rect.wrong {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.12);
+  animation: shake-rect 0.4s ease;
+}
+
+@keyframes shake-rect {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6rpx); }
+  40% { transform: translateX(6rpx); }
+  60% { transform: translateX(-4rpx); }
+  80% { transform: translateX(4rpx); }
+}
+
+.scatter-item.selected {
+  /* 选中态：放大、高亮边框 */
+  transform: scale(1.2);
+  z-index: 20;
+  filter: drop-shadow(0 0 8rpx #4ecdc4);
+}
+
+.scatter-item.flown {
+  /* 飞行态由内联 style 控制 transform/opacity/transition */
+  z-index: 30;
+}
+
+.scatter-fly-item {
+  position: absolute;
+  font-size: 72rpx;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 30;
+  will-change: transform, opacity;
+}
+
+.scatter-number-popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120rpx;
+  font-weight: 900;
+  color: #4ecdc4;
+  text-shadow: 0 4rpx 12rpx rgba(78, 205, 196, 0.4);
+  z-index: 40;
+  pointer-events: none;
+  animation: pop-in-center 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- 生活大冒险：公交车上 ---------- */
+.bus-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.bus-box {
+  padding: 20rpx 24rpx;
+  background: linear-gradient(180deg, #ffffff, #f4fbf9);
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.bus-head {
+  text-align: center;
+  font-size: 56rpx;
+  margin-bottom: 8rpx;
+}
+
+.bus-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14rpx;
+  min-height: 110rpx;
+}
+
+.bus-rider {
+  font-size: 56rpx;
+  line-height: 1.15;
+  transition: all 0.3s ease;
+}
+
+.bus-rider.off {
+  opacity: 0.25;
+  transform: scale(0.8);
+}
+
+.bus-rider.on {
+  animation-duration: 0.4s;
+}
+
+.bus-hint {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #ffa94d;
+  padding: 8rpx 0;
+}
+
+/* ---------- 生活大冒险：分糖果 ---------- */
+.share-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.share-plate {
+  padding: 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.share-label {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  margin-bottom: 12rpx;
+}
+
+.share-candies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10rpx;
+  min-height: 80rpx;
+  align-items: center;
+}
+
+.share-candy {
+  font-size: 52rpx;
+  line-height: 1.1;
+}
+
+.share-friends {
+  display: flex;
+  justify-content: center;
+  gap: 48rpx;
+  padding: 8rpx 0;
+}
+
+.share-friend {
+  font-size: 68rpx;
+  line-height: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.share-friend:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.share-friend:nth-child(3) {
+  animation-delay: 1s;
+}
+
+/* ---------- 生活大冒险：收银算钱 ---------- */
+.shop-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.shop-tag {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  padding: 8rpx 28rpx;
+  background: #fff7e6;
+  border: 3rpx solid #ffd43b;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #d99a00;
+}
+
+.shop-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14rpx;
+  padding: 28rpx 24rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  min-height: 140rpx;
+}
+
+.shop-item {
+  font-size: 64rpx;
+  line-height: 1.1;
+}
+
+.shop-bag {
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #4ecdc4;
+}
+
+/* ---------- 生活大冒险：排队序数 ---------- */
+.queue-wrap {
+  padding: 44rpx 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  min-height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.queue-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.queue-animal {
+  position: relative;
+  font-size: 64rpx;
+  line-height: 1.2;
+  transition: all 0.15s ease;
+}
+
+.queue-animal.is-target {
+  transform: scale(1.18);
+  animation: bounce-up 1.2s ease-in-out infinite;
+}
+
+.queue-animal.is-target::after {
+  content: '❓';
+  position: absolute;
+  top: -26rpx;
+  right: -14rpx;
+  font-size: 28rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.15));
+}
+
+/* ---------- 时间与钱币：钟表（纯 CSS） ---------- */
+.clock-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 24rpx 0 8rpx;
+}
+
+.clock-face {
+  position: relative;
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #ffffff, #f4fbf9);
+  border: 10rpx solid #2d3436;
+  box-shadow: 0 8rpx 24rpx rgba(45, 52, 54, 0.15);
+}
+
+.clock-num {
+  position: absolute;
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #2d3436;
+}
+
+.clock-num.n12 { top: 6rpx; left: 50%; transform: translateX(-50%); }
+.clock-num.n3 { top: 50%; right: 10rpx; transform: translateY(-50%); }
+.clock-num.n6 { bottom: 6rpx; left: 50%; transform: translateX(-50%); }
+.clock-num.n9 { top: 50%; left: 10rpx; transform: translateY(-50%); }
+
+/* 指针：底部中心在圆心，transform-origin 指向底部中心 */
+.clock-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  border-radius: 999rpx;
+  transform-origin: 50% 100%;
+}
+
+.clock-hand.hour {
+  width: 10rpx;
+  height: 84rpx;
+  margin-left: -5rpx;
+  background: #2d3436;
+}
+
+.clock-hand.minute {
+  width: 6rpx;
+  height: 116rpx;
+  margin-left: -3rpx;
+  background: #ff6b6b;
+}
+
+.clock-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18rpx;
+  height: 18rpx;
+  margin-left: -9rpx;
+  margin-top: -9rpx;
+  border-radius: 50%;
+  background: #ff6b6b;
+  border: 4rpx solid #ffffff;
+}
+
+/* ---------- 时间与钱币：硬币 ---------- */
+.coin-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 32rpx 0 8rpx;
+}
+
+.coin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 -6rpx 0 rgba(0, 0, 0, 0.18),
+    inset 0 4rpx 0 rgba(255, 255, 255, 0.4),
+    0 4rpx 12rpx rgba(45, 52, 54, 0.18);
+}
+
+.coin-big {
+  width: 160rpx;
+  height: 160rpx;
+}
+
+.coin-small {
+  width: 84rpx;
+  height: 84rpx;
+}
+
+.coin-text {
+  font-size: 32rpx;
+  font-weight: 900;
+  color: #2d3436;
+  text-shadow: 0 1rpx 0 rgba(255, 255, 255, 0.6);
+}
+
+.coin-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 12rpx 0;
+}
+
+/* ---------- 时间与钱币：购物 ---------- */
+.pay-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 12rpx 0 8rpx;
+}
+
+.pay-goods {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  padding: 24rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.pay-item {
+  font-size: 96rpx;
+  line-height: 1;
+  animation: bounce-up 1.2s ease-in-out infinite;
+}
+
+.pay-tag {
+  padding: 6rpx 28rpx;
+  background: #fff7e6;
+  border: 3rpx solid #ffd43b;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #d99a00;
+}
+
+.pay-wallet {
+  padding: 18rpx 24rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.wallet-label {
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  margin-bottom: 6rpx;
+}
+
+/* ---------- 数字好朋友：听音数数 ---------- */
+.sound-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 40rpx 20rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+  min-height: 260rpx;
+  justify-content: center;
+}
+
+.sound-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 30rpx 60rpx;
+  background: linear-gradient(135deg, #4ecdc4, #38d9a9);
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(78, 205, 196, 0.35);
+}
+
+.sound-player:active {
+  transform: scale(0.94);
+}
+
+.sound-icon {
+  font-size: 80rpx;
+  line-height: 1;
+}
+
+.sound-label {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.sound-hint {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  text-align: center;
 }

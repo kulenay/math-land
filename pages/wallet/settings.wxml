@@ -1,0 +1,109 @@
+<view class="settings-page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view class="btn-back" bindtap="onBack">←</view>
+    <view class="topbar-title">家长设置</view>
+    <view></view>
+  </view>
+
+  <!-- PIN 解锁 -->
+  <view wx:if="{{locked}}" class="pin-lock">
+    <view class="pin-icon">🔒</view>
+    <view class="pin-title">家长验证</view>
+    <view class="pin-tip">输入 4 位数字 PIN（默认 0000）</view>
+    <input
+      class="pin-input"
+      type="number"
+      maxlength="4"
+      password="{{true}}"
+      value="{{pin}}"
+      placeholder="****"
+      bindinput="onPinInput"
+      bindconfirm="onPinConfirm"
+    />
+    <view class="pin-error" wx:if="{{pinError}}">{{pinError}}</view>
+    <view class="btn-primary pin-btn" bindtap="onPinConfirm">进入设置</view>
+  </view>
+
+  <!-- 设置内容 -->
+  <block wx:else>
+    <!-- 任务管理 -->
+    <view class="card">
+      <view class="card-head">
+        <view class="card-title">🧹 家务任务</view>
+        <view class="card-badge">{{tasks.length}} 个</view>
+      </view>
+      <view wx:for="{{tasks}}" wx:key="id" class="cfg-row">
+        <view class="cfg-emoji">{{item.emoji}}</view>
+        <view class="cfg-name">{{item.name}}</view>
+        <view class="cfg-amount">{{item.amountText}}</view>
+        <view class="cfg-del" data-id="{{item.id}}" bindtap="onRemoveTask">✕</view>
+      </view>
+      <view class="cfg-form">
+        <input class="cfg-input cfg-input-sm" value="{{taskEmoji}}" placeholder="emoji" bindinput="onTaskEmoji" />
+        <input class="cfg-input" value="{{taskName}}" placeholder="任务名，如：扫地" bindinput="onTaskInput" />
+        <input class="cfg-input cfg-input-amt" type="digit" value="{{taskAmount}}" placeholder="元" bindinput="onTaskAmount" />
+        <view class="cfg-add" bindtap="onAddTask">＋ 添加</view>
+      </view>
+    </view>
+
+    <!-- 消费管理 -->
+    <view class="card">
+      <view class="card-head">
+        <view class="card-title">🎮 消费项</view>
+        <view class="card-badge">{{spends.length}} 个</view>
+      </view>
+      <view wx:for="{{spends}}" wx:key="id" class="cfg-row">
+        <view class="cfg-emoji">{{item.emoji}}</view>
+        <view class="cfg-name">{{item.name}}</view>
+        <view class="cfg-amount spend">{{item.amountText}}</view>
+        <view class="cfg-del" data-id="{{item.id}}" bindtap="onRemoveSpend">✕</view>
+      </view>
+      <view class="cfg-form">
+        <input class="cfg-input cfg-input-sm" value="{{spendEmoji}}" placeholder="emoji" bindinput="onSpendEmoji" />
+        <input class="cfg-input" value="{{spendName}}" placeholder="名称，如：玩手机30分钟" bindinput="onSpendInput" />
+        <input class="cfg-input cfg-input-amt" type="digit" value="{{spendAmount}}" placeholder="元" bindinput="onSpendAmount" />
+        <view class="cfg-add" bindtap="onAddSpend">＋ 添加</view>
+      </view>
+    </view>
+
+    <!-- 利率 -->
+    <view class="card">
+      <view class="card-head">
+        <view class="card-title">🏦 储蓄利率</view>
+      </view>
+      <view class="cfg-form">
+        <input class="cfg-input cfg-input-amt" type="digit" value="{{interestRate}}" bindinput="onRateInput" />
+        <view class="cfg-label">%/天（每天按复利计算）</view>
+        <view class="cfg-add" bindtap="onSaveRate">保存</view>
+      </view>
+      <view class="tip-line">💡 例：存 10 元、1%/天 → 第 2 天 10.10 元，第 3 天 10.20 元……这就是复利</view>
+    </view>
+
+    <!-- 修改 PIN -->
+    <view class="card">
+      <view class="card-head">
+        <view class="card-title">🔑 修改家长 PIN</view>
+      </view>
+      <view class="cfg-form">
+        <input
+          class="cfg-input cfg-input-amt"
+          type="number"
+          maxlength="4"
+          password="{{true}}"
+          value="{{newPin}}"
+          placeholder="4 位数字"
+          bindinput="onNewPin"
+        />
+        <view class="cfg-add" bindtap="onSavePin">保存</view>
+      </view>
+    </view>
+
+    <!-- 重置 -->
+    <view class="card">
+      <view class="card-head">
+        <view class="card-title">⚠️ 危险区</view>
+      </view>
+      <view class="reset-btn" bindtap="onReset">重置整个钱包</view>
+    </view>
+  </block>
+</view>

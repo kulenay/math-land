@@ -50,7 +50,7 @@ async function answerCurrent(inst, correct) {
       const cur = inst.data.view;
       const idx = cur.cells.findIndex((c) => c === 0);
       inst.onCellTap.call(inst, { currentTarget: { dataset: { index: idx } } });
-      await sleep(60);
+      await sleep(50);
     }
   } else if (view.type === 'feed') {
     // 喂跳跳：点虫子放盘到目标
@@ -59,38 +59,38 @@ async function answerCurrent(inst, correct) {
       const cur = inst.data.view;
       const idx = cur.bugs.findIndex((_, i) => !cur.plate.includes(i));
       inst.onBugTap.call(inst, { currentTarget: { dataset: { index: idx } } });
-      await sleep(60);
+      await sleep(50);
     }
-  } else if (view.type === 'split') {
-    // split：点 answerPair 的两个数凑 10
+  } else if (view.type === 'split' || view.type === 'splitnum' || view.type === 'neighbor') {
+    // 点两个数：split 凑 10 / splitnum 凑 total / neighbor 找前后邻居
     const [a, b] = inst.q.answerPair;
     inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(a) } } });
-    await sleep(30);
+    await sleep(20);
     inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(b) } } });
-    await sleep(30);
-    await sleep(1000); // advance 900ms
+    await sleep(20);
+    await sleep(920); // advance 900ms
     return;
   } else if (view.type === 'pair') {
     // 依次配对所有 pairs
     for (const [a, b] of inst.q.pairs) {
       inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(a) } } });
-      await sleep(30);
+      await sleep(20);
       inst.onPickTap.call(inst, { currentTarget: { dataset: { key: String(b) } } });
-      await sleep(30);
+      await sleep(20);
     }
-    await sleep(1500); // 配完最后一对的 advance 延迟 + 推进
+    await sleep(1450); // 配完最后一对的 advance 延迟 + 推进
     return;
   } else if (view.type === 'match') {
     // match 是点堆交互，按 answerIndex 判定
     const key = correct ? String(inst.q.answerIndex) : '0';
     inst.onGroupTap.call(inst, { currentTarget: { dataset: { key } } });
-    await sleep(30);
+    await sleep(20);
   } else {
     const key = correct ? String(inst.q.answer) : 'wrong';
     inst.onOptionTap.call(inst, { currentTarget: { dataset: { key } } });
-    await sleep(30);
+    await sleep(20);
   }
-  await sleep(1000); // 等 advance 的 900ms timer
+  await sleep(920); // 等 advance 的 900ms timer
 }
 
 (async () => {
@@ -106,7 +106,7 @@ async function answerCurrent(inst, correct) {
   assert('第1关 hasNext=true', a.data.hasNext === true);
   assert('进度条满', a.data.progress === 100);
   assert('存档已写入（第1关3星）', store.ml_progress_v1 && store.ml_progress_v1.modules['1'].stars['1'] === 3);
-  await sleep(2600); // 等自动跳转 2400ms
+  await sleep(2500); // 等自动跳转 2400ms
   assert('自动跳转到第2关', calls.redirectTo.length === 1 && calls.redirectTo[0].includes('level=2'));
 
   // 场景 B：第 1 关第一题答错再答对
@@ -120,6 +120,19 @@ async function answerCurrent(inst, correct) {
   assert('首题答错 firstCorrect=5', b.firstCorrect === 5);
   assert('5/6 → 2 星', b.data.starList.length === 2);
 
+  // 场景 A2：答对数字 → 数字精灵即时庆祝（端到端）
+  console.log('== 场景 A2：答对精灵庆祝 ==');
+  const a2 = newInst();
+  a2.onLoad.call(a2, { module: '1', level: '1' });
+  const q0 = a2.q;
+  assert('第1关首题为选择题', a2.data.isChoice === true);
+  a2.onOptionTap.call(a2, { currentTarget: { dataset: { key: String(q0.answer) } } });
+  assert('答对后精灵即时弹出', a2.data.sprite !== null, 'sprite=' + JSON.stringify(a2.data.sprite));
+  assert('精灵数字与答案一致', a2.data.sprite && a2.data.sprite.n === q0.answer);
+  assert('精灵身体圆点数 = 答案', a2.data.sprite && a2.data.sprite.dots.length === q0.answer);
+  assert('精灵有颜色与表情', a2.data.sprite && a2.data.sprite.color && a2.data.sprite.face);
+  assert('存档不包含精灵收集字段', !(store.ml_progress_v1 && store.ml_progress_v1.sprites));
+
   // 场景 C：第 8 关（最后一关）通关 → 自动回地图
   console.log('== 场景 C：最后一关通关 ==');
   calls.navigateBack = 0;
@@ -127,7 +140,7 @@ async function answerCurrent(inst, correct) {
   c.onLoad.call(c, { module: '1', level: '8' });
   for (let i = 0; i < 6; i++) await answerCurrent(c, true);
   assert('最后一关 hasNext=false', c.data.hasNext === false);
-  await sleep(2600);
+  await sleep(2500);
   assert('自动回地图', calls.navigateBack === 1);
 
   // 场景 D：不存在的关卡
@@ -178,6 +191,19 @@ async function answerCurrent(inst, correct) {
   assert('split 通关 result 弹出', h.data.result !== null);
   assert('split 全首答 firstCorrect=6', h.firstCorrect === 6);
   assert('split 3 星', h.data.starList.length === 3);
+
+  // 场景 I：数字好朋友 splitnum + neighbor（曾因语义题目缺 mode/target 判定错乱）
+  console.log('== 场景 I：数字好朋友 splitnum + neighbor ==');
+  const i1 = newInst();
+  i1.onLoad.call(i1, { module: '4', level: '3' }); // 分与合
+  for (let k = 0; k < 6; k++) await answerCurrent(i1, true);
+  assert('splitnum 通关 result 弹出', i1.data.result !== null);
+  assert('splitnum 全首答 firstCorrect=6', i1.firstCorrect === 6);
+  const i2 = newInst();
+  i2.onLoad.call(i2, { module: '4', level: '2' }); // 找邻居
+  for (let k = 0; k < 6; k++) await answerCurrent(i2, true);
+  assert('neighbor 通关 result 弹出', i2.data.result !== null);
+  assert('neighbor 全首答 firstCorrect=6', i2.firstCorrect === 6);
 
   console.log('\n结果: ' + pass + ' 通过, ' + fail + ' 失败');
   process.exit(fail ? 1 : 0);

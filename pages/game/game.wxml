@@ -29,8 +29,40 @@
 
   <!-- ============ 操作区 ============ -->
   <view class="play-area">
-    <!-- scatter：散落点数 -->
-    <view wx:if="{{view.type === 'scatter'}}" class="scatter-area">
+    <!-- scatter：散落点数 - 新交互：框选计数 -->
+    <view wx:if="{{view.type === 'scatter' && view.interactionMode === 'drag-select'}}" class="scatter-area" 
+          bindtouchstart="scatterTouchStart"
+          bindtouchmove="scatterTouchMove"
+          bindtouchend="scatterTouchEnd"
+          bindtouchcancel="scatterTouchCancel">
+      <!-- 选区矩形 -->
+      <view wx:if="{{scatterSelectRect.visible}}" 
+            class="scatter-select-rect {{scatterSelectRect.wrong ? 'wrong' : ''}}"
+            style="left:{{scatterSelectRect.left}}%;top:{{scatterSelectRect.top}}%;width:{{scatterSelectRect.width}}%;height:{{scatterSelectRect.height}}%"></view>
+      
+      <!-- 散落物品 -->
+      <view
+        wx:for="{{view.scatter}}"
+        wx:key="id"
+        class="scatter-item {{item.selected ? 'selected' : ''}} {{item.flown ? 'flown' : ''}}"
+        style="left:{{item.x}}%;top:{{item.y}}%;animation-delay:{{index * 50}}ms"
+        data-id="{{item.id}}"
+      >{{item.emoji}}</view>
+
+      <!-- 飞入聚合动画层：选中项飞向中心 -->
+      <view wx:for="{{view.scatter}}" wx:key="id" wx:if="{{item.flown}}" class="scatter-fly-item" 
+            style="left:{{item.x}}%;top:{{item.y}}%;transform:translate({{item.flyTx}}%,{{item.flyTy}}%) scale({{item.flyScale}});opacity:{{item.flyOpacity}};transition:all {{item.flyDuration}}ms cubic-bezier(0.34,1.56,0.64,1);">
+        {{item.emoji}}
+      </view>
+
+      <!-- 数字弹出 -->
+      <view wx:if="{{scatterNumberPopup.visible}}" class="scatter-number-popup" style="animation-delay:{{scatterNumberPopup.delay}}ms">
+        {{scatterNumberPopup.number}}
+      </view>
+    </view>
+
+    <!-- scatter：旧交互兼容（无障碍/降级） -->
+    <view wx:elif="{{view.type === 'scatter'}}" class="scatter-area">
       <view
         wx:for="{{view.scatter}}"
         wx:key="index"
@@ -99,8 +131,8 @@
       <view class="ten-hint">先把 {{view.filled}} 凑成 10，再算剩下的</view>
     </view>
 
-    <!-- split / pair：点两个数凑 10 -->
-    <view wx:elif="{{view.type === 'split' || view.type === 'pair'}}" class="pick-grid">
+    <!-- split / pair / neighbor / splitnum：点两个数 -->
+    <view wx:elif="{{view.type === 'split' || view.type === 'pair' || view.type === 'neighbor' || view.type === 'splitnum'}}" class="pick-grid">
       <view
         wx:for="{{view.options}}"
         wx:key="key"
@@ -108,6 +140,32 @@
         data-key="{{item.key}}"
         bindtap="onPickTap"
       >{{item.label}}</view>
+    </view>
+
+    <!-- soundcount：听音数数 -->
+    <view wx:elif="{{view.type === 'soundcount'}}" class="sound-wrap">
+      <view class="sound-player" bindtap="onReplaySound">
+        <view class="sound-icon anim-float">🔊</view>
+        <view class="sound-label">点我，再听一次</view>
+      </view>
+      <view class="sound-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- sign：比大小选符号 -->
+    <view wx:elif="{{view.type === 'sign'}}" class="compare-row">
+      <view class="compare-box">
+        <view class="compare-label">左边</view>
+        <view class="compare-items">
+          <text wx:for="{{view.left}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+        </view>
+      </view>
+      <view class="compare-vs">?</view>
+      <view class="compare-box">
+        <view class="compare-label">右边</view>
+        <view class="compare-items">
+          <text wx:for="{{view.right}}" wx:key="index" class="row-item anim-pop">{{item}}</text>
+        </view>
+      </view>
     </view>
 
     <!-- feed：喂跳跳 -->
@@ -176,6 +234,116 @@
         </view>
       </view>
     </view>
+
+    <!-- bus：公交车上（上来/下去，数现在几人） -->
+    <view wx:elif="{{view.type === 'bus'}}" class="bus-wrap">
+      <view class="bus-box">
+        <view class="bus-head">🚌</view>
+        <view class="bus-body">
+          <text
+            wx:for="{{view.riders}}"
+            wx:key="id"
+            class="bus-rider {{item.status}} anim-pop"
+            style="animation-delay:{{index * 120}}ms"
+          >{{item.emoji}}</text>
+        </view>
+      </view>
+      <view class="bus-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- share：分糖果（等分） -->
+    <view wx:elif="{{view.type === 'share'}}" class="share-wrap">
+      <view class="share-plate">
+        <view class="share-label">🍬 糖果盘</view>
+        <view class="share-candies">
+          <text wx:for="{{view.candies}}" wx:key="*this" class="share-candy anim-pop" style="animation-delay:{{index * 80}}ms">🍬</text>
+        </view>
+      </view>
+      <view class="share-friends">
+        <view wx:for="{{view.friends}}" wx:key="index" class="share-friend">{{item}}</view>
+      </view>
+      <view class="ten-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- shop：收银算钱 -->
+    <view wx:elif="{{view.type === 'shop'}}" class="shop-wrap">
+      <view class="shop-tag">{{view.hint}}</view>
+      <view class="shop-items">
+        <text wx:for="{{view.items}}" wx:key="*this" class="shop-item anim-pop" style="animation-delay:{{index * 100}}ms">{{view.item}}</text>
+      </view>
+      <view class="shop-bag">💰 一共要付几元？</view>
+    </view>
+
+    <!-- queue：排队序数 -->
+    <view wx:elif="{{view.type === 'queue'}}" class="queue-wrap">
+      <view class="queue-row">
+        <view
+          wx:for="{{view.row}}"
+          wx:key="index"
+          class="queue-animal {{item.isTarget ? 'is-target' : ''}} anim-pop"
+          style="animation-delay:{{index * 100}}ms"
+        >{{item.emoji}}</view>
+      </view>
+    </view>
+
+    <!-- clock：认钟表（纯 CSS 时针/分针） -->
+    <view wx:elif="{{view.type === 'clock'}}" class="clock-wrap">
+      <view class="clock-face">
+        <view class="clock-num n12">12</view>
+        <view class="clock-num n3">3</view>
+        <view class="clock-num n6">6</view>
+        <view class="clock-num n9">9</view>
+        <view class="clock-hand hour" style="transform:rotate({{view.hourAngle}}deg)"></view>
+        <view class="clock-hand minute" style="transform:rotate({{view.minuteAngle}}deg)"></view>
+        <view class="clock-center"></view>
+      </view>
+      <view class="ten-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- coin：认钱币 -->
+    <view wx:elif="{{view.type === 'coin'}}" class="coin-wrap">
+      <view class="coin coin-big" style="background:{{view.coin.color}}">
+        <text class="coin-text">{{view.coin.label}}</text>
+      </view>
+      <view class="ten-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- money：数钱求和 -->
+    <view wx:elif="{{view.type === 'money'}}" class="coin-wrap">
+      <view class="coin-row">
+        <view
+          wx:for="{{view.coins}}"
+          wx:key="index"
+          class="coin anim-pop"
+          style="background:{{item.color}};animation-delay:{{index * 120}}ms"
+        >
+          <text class="coin-text">{{item.label}}</text>
+        </view>
+      </view>
+      <view class="ten-hint">{{view.hint}}</view>
+    </view>
+
+    <!-- pay：购物付钱 -->
+    <view wx:elif="{{view.type === 'pay'}}" class="pay-wrap">
+      <view class="pay-goods">
+        <view class="pay-item">{{view.item}}</view>
+        <view class="pay-tag">{{view.price}} 元</view>
+      </view>
+      <view class="pay-wallet">
+        <view class="wallet-label">💰 你的钱包</view>
+        <view class="coin-row">
+          <view
+            wx:for="{{view.coins}}"
+            wx:key="*this"
+            class="coin coin-small anim-pop"
+            style="animation-delay:{{index * 100}}ms"
+          >
+            <text class="coin-text">1元</text>
+          </view>
+        </view>
+      </view>
+      <view class="ten-hint">{{view.hint}}</view>
+    </view>
   </view>
 
   <!-- ============ 选项区（选择题） ============ -->
@@ -190,9 +358,30 @@
   </view>
 
   <!-- ============ 反馈浮层 ============ -->
-  <view class="feedback feedback-{{feedback.type}}" wx:if="{{feedback}}">
-    <view class="feedback-emoji">{{feedback.type === 'correct' ? '✨' : '💡'}}</view>
-    <view class="feedback-text">{{feedback.text}}</view>
+  <view class="feedback feedback-{{feedback.type}} {{sprite ? 'feedback-sprite' : ''}}" wx:if="{{feedback}}">
+    <block wx:if="{{feedback.type === 'correct' && sprite}}">
+      <!-- 数字精灵庆祝：答对数字 N，精灵 N 跳出来 -->
+      <view class="sprite sprite-{{sprite.size}}">
+        <view class="sprite-face">{{sprite.face}}</view>
+        <view class="sprite-dots">
+          <view
+            wx:for="{{sprite.dots}}"
+            wx:key="*this"
+            class="sprite-dot"
+            style="background:{{sprite.color}};animation-delay:{{index * 60}}ms"
+          ></view>
+        </view>
+      </view>
+      <view class="feedback-col">
+        <view class="feedback-text">{{feedback.text}}</view>
+        <view class="sprite-meta">数字精灵 · {{sprite.name}}{{sprite.n}}</view>
+        <view class="sprite-line">{{sprite.line}}</view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="feedback-emoji">{{feedback.type === 'correct' ? '✨' : '💡'}}</view>
+      <view class="feedback-text">{{feedback.text}}</view>
+    </block>
   </view>
 
   <!-- ============ 结算浮层 ============ -->

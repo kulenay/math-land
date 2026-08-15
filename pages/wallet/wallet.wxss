@@ -1,0 +1,273 @@
+.wallet-page {
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+  background: linear-gradient(180deg, #e8f7f5 0%, #f2fbf9 100%);
+}
+
+/* ---------- 余额卡 ---------- */
+.balance-card {
+  margin: 12rpx 24rpx 20rpx;
+  padding: 32rpx 32rpx 24rpx;
+  background: linear-gradient(135deg, #4ecdc4, #38d9a9);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 28rpx rgba(78, 205, 196, 0.35);
+  text-align: center;
+}
+
+.balance-label {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.balance-num {
+  display: inline-block;
+  font-size: 96rpx;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  margin-top: 8rpx;
+}
+
+.balance-unit {
+  display: inline-block;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 8rpx;
+}
+
+.balance-tip {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- 通用卡片 ---------- */
+.card {
+  margin: 0 24rpx 20rpx;
+  padding: 24rpx;
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 900;
+  color: #2d3436;
+}
+
+.card-badge {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #95a5a6;
+  background: #f4f8f7;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+
+/* ---------- 储蓄罐 ---------- */
+.savings-row {
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
+.savings-num {
+  font-size: 56rpx;
+  font-weight: 900;
+  color: #e8a200;
+}
+
+.money-op {
+  padding: 16rpx;
+  background: #f7fbfa;
+  border-radius: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.op-label {
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #95a5a6;
+  margin-bottom: 12rpx;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+}
+
+.step-btn {
+  padding: 10rpx 20rpx;
+  background: #ffffff;
+  border: 3rpx solid #d5e8e5;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.step-btn:active {
+  transform: scale(0.92);
+}
+
+.step-value {
+  min-width: 130rpx;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #4ecdc4;
+}
+
+.op-btns {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.op-btn {
+  padding: 12rpx 32rpx;
+  background: #ffffff;
+  border: 3rpx solid #d5e8e5;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.op-btn.primary {
+  background: linear-gradient(135deg, #4ecdc4, #38d9a9);
+  border: none;
+  color: #ffffff;
+}
+
+.op-btn:active {
+  transform: scale(0.94);
+}
+
+.interest-tip {
+  margin-top: 8rpx;
+  padding: 14rpx 20rpx;
+  background: #fff7e6;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #d99a00;
+  line-height: 1.5;
+}
+
+/* ---------- 任务 / 消费行 ---------- */
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 16rpx 8rpx;
+  border-bottom: 3rpx solid #f0f6f5;
+}
+
+.task-row:last-child {
+  border-bottom: none;
+}
+
+.task-row:active {
+  background: #f7fbfa;
+  border-radius: 16rpx;
+}
+
+.task-row.done {
+  opacity: 0.5;
+}
+
+.task-emoji {
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.task-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.task-amount {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #51cf66;
+}
+
+.task-amount.spend {
+  color: #ff6b6b;
+}
+
+.task-btn {
+  padding: 8rpx 24rpx;
+  background: linear-gradient(135deg, #4ecdc4, #38d9a9);
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.task-btn.spend-btn {
+  background: linear-gradient(135deg, #ff8787, #ff6b6b);
+}
+
+.empty-tip {
+  text-align: center;
+  font-size: 24rpx;
+  color: #b8c9c6;
+  padding: 16rpx 0;
+}
+
+/* ---------- 历史 ---------- */
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 12rpx 4rpx;
+  border-bottom: 3rpx solid #f0f6f5;
+}
+
+.history-row:last-child {
+  border-bottom: none;
+}
+
+.history-desc {
+  flex: 1;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.history-time {
+  font-size: 22rpx;
+  color: #b8c9c6;
+}
+
+.history-amount {
+  font-size: 26rpx;
+  font-weight: 800;
+  min-width: 120rpx;
+  text-align: right;
+}
+
+.history-amount.plus {
+  color: #51cf66;
+}
+
+.history-amount.minus {
+  color: #ff6b6b;
+}

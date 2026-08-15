@@ -19,5 +19,14 @@ App({
     if (settings && typeof settings.soundOn === 'boolean') {
       this.globalData.soundOn = settings.soundOn;
     }
+
+    // 云开发初始化（AI 互动板块用；未开通云开发时静默降级）
+    if (wx.cloud) {
+      try {
+        wx.cloud.init({ traceUser: true });
+      } catch (e) {
+        // 忽略：AI 板块页面会自行提示
+      }
+    }
   },
 });

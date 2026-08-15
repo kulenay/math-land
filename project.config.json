@@ -1,6 +1,7 @@
 {
   "compileType": "miniprogram",
-  "libVersion": "3.7.12",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "libVersion": "3.4.0",
   "appid": "wx1b2aa4a7f1a7266f",
   "projectname": "math-land",
   "description": "数感探索乐园 - 小学数学游戏闯关小程序",

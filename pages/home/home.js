@@ -1,16 +1,17 @@
-// 主页：模块选择
+// 主页：模块选择 + 生活板块（数字钱包）
 const modules = require('../../modules/index.js');
 const storage = require('../../core/storage.js');
+const wallet = require('../../core/wallet.js');
 
 Page({
   data: {
     statusBarHeight: 20,
     totalStars: 0,
+    walletBalance: '0.00',
     moduleCards: [], // 已开发模块（可进），运行时从注册表生成
     lockedModules: [ // 未开发占位（锁定）
-      { id: 3, icon: '🏠', name: '数字搬家', desc: '位值' },
-      { id: 4, icon: '🌉', name: '过河冒险', desc: '进退位' },
-      { id: 5, icon: '🛒', name: '购物乐园', desc: '人民币' },
+      { id: 6, icon: '🌉', name: '过河冒险', desc: '进退位' },
+      { id: 7, icon: '💎', name: '数字搬家', desc: '位值' },
     ],
   },
 
@@ -31,7 +32,11 @@ Page({
       stars: storage.getModuleStars(m.id),
     }));
     const totalStars = moduleCards.reduce((sum, c) => sum + c.stars, 0);
-    this.setData({ moduleCards, totalStars });
+    this.setData({
+      moduleCards,
+      totalStars,
+      walletBalance: (wallet.load().balance / 100).toFixed(2),
+    });
   },
 
   onModuleTap(e) {
@@ -42,6 +47,11 @@ Page({
   // 未开发模块：给个温和反馈，不让孩子干等
   onLockedTap() {
     wx.showToast({ title: '该区域建设中，敬请期待～', icon: 'none' });
+  },
+
+  // 生活板块：数字钱包
+  onWalletTap() {
+    wx.navigateTo({ url: '/pages/wallet/wallet' });
   },
 
   // 调试入口：连点跳跳 5 次解锁已开发模块全部关卡

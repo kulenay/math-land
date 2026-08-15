@@ -1,0 +1,65 @@
+<view class="ai-page" style="padding-top:{{statusBarHeight}}px">
+  <view class="topbar">
+    <view class="btn-back" bindtap="onBack">←</view>
+    <view class="topbar-title">问跳跳 🤖</view>
+    <view></view>
+  </view>
+
+  <view class="ai-hero">
+    <view class="ai-hero-text">🐸 我是跳跳！数学问题尽管问我～</view>
+  </view>
+
+  <!-- 预设问题（空聊时展示，帮小朋友快速开口） -->
+  <scroll-view wx:if="{{!messages.length && cloudReady}}" class="preset-scroll" scroll-x>
+    <view class="preset-row">
+      <view
+        wx:for="{{presets}}"
+        wx:key="q"
+        class="preset-chip {{loading ? 'disabled' : ''}}"
+        data-q="{{item.q}}"
+        bindtap="onPresetTap"
+      >
+        <text class="preset-icon">{{item.icon}}</text>
+        <text class="preset-text">{{item.q}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 聊天区 -->
+  <scroll-view class="chat-list" scroll-y scroll-into-view="{{scrollTo}}" scroll-with-animation>
+    <view
+      wx:for="{{messages}}"
+      wx:key="index"
+      id="msg-{{index}}"
+      class="msg {{item.role === 'user' ? 'msg-user' : 'msg-ai'}}"
+    >
+      <view class="msg-avatar">{{item.role === 'user' ? '🧒' : '🐸'}}</view>
+      <view class="msg-bubble {{item.loading ? 'loading' : ''}}">
+        <block wx:if="{{item.loading}}">
+          <text class="dot">●</text><text class="dot d2">●</text><text class="dot d3">●</text>
+        </block>
+        <block wx:else>{{item.text}}</block>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区 -->
+  <view class="input-bar">
+    <input
+      class="input-field"
+      value="{{input}}"
+      placeholder="输入你的问题…"
+      confirm-type="send"
+      bindinput="onInput"
+      bindconfirm="onSend"
+      disabled="{{loading}}"
+    />
+    <view class="send-btn {{loading ? 'disabled' : ''}}" bindtap="onSend">
+      {{loading ? '…' : '发送'}}
+    </view>
+  </view>
+
+  <view wx:if="{{!cloudReady}}" class="cloud-tip">
+    提示：此页面需要微信云开发支持。请先开通云开发并部署 aiChat 云函数（见 README）。
+  </view>
+</view>

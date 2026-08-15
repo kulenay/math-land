@@ -34,4 +34,17 @@
   </view>
 
   <view class="home-tip">更多区域正在建设中…</view>
+
+  <!-- 生活板块 -->
+  <view class="life-section">
+    <view class="life-title">🏠 生活板块</view>
+    <view class="wallet-entry" bindtap="onWalletTap">
+      <view class="wallet-entry-icon">💰</view>
+      <view class="wallet-entry-body">
+        <view class="wallet-entry-title">数字钱包</view>
+        <view class="wallet-entry-desc">做家务挣钱 · 花钱有度 · 储蓄吃利息（零钱 {{walletBalance}} 元）</view>
+      </view>
+      <view class="wallet-entry-arrow">›</view>
+    </view>
+  </view>
 </view>

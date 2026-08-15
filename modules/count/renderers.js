@@ -37,7 +37,23 @@ function buildScatter(q) {
   return {
     type: 'scatter',
     question: `数一数，有几个${q.item}？`,
-    scatter: positions.map((p) => ({ emoji: q.item, ...p })),
+    // 新增：交互模式标记，game.js 读取决定启用新交互
+    interactionMode: 'drag-select',
+    // 正确答案（用于判定框选是否正确）
+    answer: q.count,
+    // 散落物品：每个带唯一 id、中心坐标、是否被选中
+    scatter: positions.map((p, i) => ({
+      id: i,
+      emoji: q.item,
+      x: p.x,
+      y: p.y,
+      // 中心点坐标（用于飞入动画目标点），基于百分比位置换算
+      centerX: p.x,
+      centerY: p.y,
+      selected: false,
+      flown: false,
+    })),
+    // 选项区保留兼容（旧交互兜底、无障碍模式）
     options: q.options.map((v) => ({ key: String(v), label: String(v) })),
   };
 }
