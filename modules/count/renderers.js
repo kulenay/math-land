@@ -21,8 +21,8 @@ function scatterPositions(count, areaW = 100, areaH = 100) {
     const jx = (Math.random() - 0.5) * cellW * 0.4;
     const jy = (Math.random() - 0.5) * cellH * 0.4;
     positions.push({
-      x: Math.round((c * cellW + cellW / 2 + jx) * 10) / 10,
-      y: Math.round((r * cellH + cellH / 2 + jy) * 10) / 10,
+      x: Math.round(Math.min(95, Math.max(5, c * cellW + cellW / 2 + jx)) * 10) / 10,
+      y: Math.round(Math.min(95, Math.max(5, r * cellH + cellH / 2 + jy)) * 10) / 10,
     });
   }
   return positions;

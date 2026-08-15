@@ -2,8 +2,22 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   background: linear-gradient(180deg, #e8f7f5 0%, #f2fbf9 100%);
+}
+
+/* 居中反馈浮层专用动画：translate(-50%,-50%) 必须与 scale 同帧，避免漂移 */
+@keyframes pop-in-center {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  70% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* 散落物品专用动画：同样携带 translate(-50%,-50%) 防偏移 */
+@keyframes pop-in-scatter {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  70% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 /* ---------- 顶栏 ---------- */
@@ -57,13 +71,13 @@
   display: flex;
   align-items: center;
   gap: 20rpx;
-  padding: 8rpx 32rpx 20rpx;
+  padding: 4rpx 32rpx 12rpx;
 }
 
 .frog-box {
   position: relative;
   flex-shrink: 0;
-  font-size: 100rpx;
+  font-size: 88rpx;
   line-height: 1;
   animation: float 3s ease-in-out infinite;
 }
@@ -86,8 +100,8 @@
 
 /* ---------- 题目卡 ---------- */
 .question-card {
-  margin: 0 32rpx 20rpx;
-  padding: 24rpx 32rpx;
+  margin: 0 32rpx 14rpx;
+  padding: 20rpx 32rpx;
   background: #ffffff;
   border-radius: 28rpx;
   box-shadow: 0 4rpx 16rpx rgba(45, 52, 54, 0.08);
@@ -102,18 +116,14 @@
 
 /* ---------- 操作区 ---------- */
 .play-area {
-  flex: 1;
-  min-height: 0;
   padding: 0 32rpx;
-  overflow-y: auto;
 }
 
-/* scatter 散落区 */
+/* scatter 散落区：固定高度，不撑满屏幕 */
 .scatter-area {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 380rpx;
+  height: 420rpx;
   background: linear-gradient(180deg, #ffffff, #f4fbf9);
   border-radius: 28rpx;
   border: 3rpx dashed #cfe6e2;
@@ -122,9 +132,9 @@
 
 .scatter-item {
   position: absolute;
-  font-size: 60rpx;
+  font-size: 72rpx;
   line-height: 1;
-  transform: translate(-50%, -50%);
+  animation: pop-in-scatter 0.35s ease forwards;
 }
 
 /* 整齐排列（subitize/compare/match/group 通用） */
@@ -134,14 +144,14 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 16rpx;
-  padding: 60rpx 20rpx;
+  padding: 36rpx 20rpx;
   background: #ffffff;
   border-radius: 28rpx;
-  min-height: 380rpx;
+  min-height: 200rpx;
 }
 
 .row-item {
-  font-size: 56rpx;
+  font-size: 64rpx;
   line-height: 1.2;
   animation-duration: 0.3s;
 }
@@ -168,7 +178,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 52rpx;
+  font-size: 58rpx;
   background: #f7fbfa;
   transition: all 0.15s ease;
 }
@@ -421,7 +431,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20rpx;
-  padding: 20rpx 32rpx 40rpx;
+  padding: 16rpx 32rpx 28rpx;
 }
 
 .option-btn {
@@ -471,7 +481,7 @@
   border-radius: 999rpx;
   box-shadow: 0 12rpx 40rpx rgba(45, 52, 54, 0.18);
   z-index: 200;
-  animation: pop-in 0.3s ease;
+  animation: pop-in-center 0.3s ease;
   pointer-events: none;
 }
 

@@ -34,7 +34,7 @@
       <view
         wx:for="{{view.scatter}}"
         wx:key="index"
-        class="scatter-item anim-pop"
+        class="scatter-item"
         style="left:{{item.x}}%;top:{{item.y}}%;animation-delay:{{index * 50}}ms"
       >{{item.emoji}}</view>
     </view>

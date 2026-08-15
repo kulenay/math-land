@@ -21,11 +21,39 @@ function pickItem() {
  */
 function generateLevel(level) {
   const questions = [];
+  const lastFingerprint = {};
   for (let i = 0; i < level.questionCount; i++) {
     const type = level.types[i % level.types.length];
-    questions.push(generateOne(type, level));
+    let q = generateOne(type, level);
+    // 同题型相邻去重：连续题目答案不同，提升随机感（最多重试 10 次防死循环）
+    let guard = 0;
+    while (fingerprint(q) === lastFingerprint[type] && guard < 10) {
+      q = generateOne(type, level);
+      guard++;
+    }
+    lastFingerprint[type] = fingerprint(q);
+    questions.push(q);
   }
   return questions;
+}
+
+/** 答案指纹：同题型相同答案时指纹相同，用于相邻去重。 */
+function fingerprint(q) {
+  switch (q.type) {
+    case 'scatter':
+    case 'subitize':
+    case 'feed':
+    case 'group':
+      return q.type + ':' + q.count;
+    case 'tenframe':
+      return 'tenframe:' + q.count;
+    case 'compare':
+      return 'compare:' + [q.left, q.right].sort().join(',');
+    case 'match':
+      return 'match:' + q.groups.slice().sort().join(',');
+    default:
+      return '';
+  }
 }
 
 function generateOne(type, level) {
