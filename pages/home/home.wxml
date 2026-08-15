@@ -25,7 +25,7 @@
       <view class="module-stars">⭐ {{item.stars}}</view>
     </view>
 
-    <view class="module-card locked" wx:for="{{lockedModules}}" wx:key="id">
+    <view class="module-card locked" wx:for="{{lockedModules}}" wx:key="id" bindtap="onLockedTap">
       <view class="module-icon">{{item.icon}}</view>
       <view class="module-name">{{item.name}}</view>
       <view class="module-desc">{{item.desc}}</view>

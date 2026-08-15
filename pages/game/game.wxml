@@ -198,8 +198,8 @@
   <!-- ============ 结算浮层 ============ -->
   <view class="result-mask" wx:if="{{result}}">
     <view class="result-card anim-pop">
-      <view class="result-emoji">🏆</view>
-      <view class="result-title">{{result.levelName}} 完成！</view>
+      <view class="result-emoji">{{result.perfect ? '🌟' : '🏆'}}</view>
+      <view class="result-title">{{result.title}}</view>
       <view class="result-stars">
         <text
           wx:for="{{starList}}"

@@ -39,6 +39,11 @@ Page({
     wx.navigateTo({ url: `/pages/map/map?module=${id}` });
   },
 
+  // 未开发模块：给个温和反馈，不让孩子干等
+  onLockedTap() {
+    wx.showToast({ title: '该区域建设中，敬请期待～', icon: 'none' });
+  },
+
   // 调试入口：连点跳跳 5 次解锁已开发模块全部关卡
   onFrogTap() {
     this._frogTaps = (this._frogTaps || 0) + 1;

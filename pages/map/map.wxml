@@ -22,6 +22,7 @@
         <view class="node-island {{item.current ? 'is-current' : ''}} {{item.unlocked ? '' : 'is-locked'}}">
           <block wx:if="{{item.unlocked}}">
             <view class="node-num">{{item.id}}</view>
+            <view class="node-done" wx:if="{{item.done}}">🏁</view>
             <view class="node-stars" wx:if="{{item.stars}}">
               <text wx:for="{{item.starArr}}" wx:key="index" class="node-star">⭐</text>
             </view>

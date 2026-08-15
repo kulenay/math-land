@@ -101,6 +101,15 @@
   font-size: 26rpx;
 }
 
+/* 已完成角标 */
+.node-done {
+  position: absolute;
+  top: -18rpx;
+  right: -14rpx;
+  font-size: 36rpx;
+  filter: drop-shadow(0 2rpx 6rpx rgba(0, 0, 0, 0.15));
+}
+
 .node-tap {
   position: absolute;
   bottom: -6rpx;

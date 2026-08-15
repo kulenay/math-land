@@ -36,6 +36,7 @@ Page({
     const nodes = all.map((l, i) => {
       const unlocked = storage.isLevelUnlocked(this.moduleId, l.id);
       const stars = storage.getLevelStars(this.moduleId, l.id);
+      const current = unlocked && stars === 0 && (i === 0 || storage.getLevelStars(this.moduleId, all[i - 1].id) > 0);
       return {
         id: l.id,
         name: l.name,
@@ -44,7 +45,8 @@ Page({
         stars,
         starArr: Array.from({ length: stars }, (_, i) => i),
         offset: i % 2 === 0 ? 'left' : 'right',
-        current: unlocked && stars === 0 && (i === 0 || storage.getLevelStars(this.moduleId, all[i - 1].id) > 0),
+        current,
+        done: stars > 0 && !current, // 已通关且非当前关 → 显示完成角标
       };
     });
     this.setData({

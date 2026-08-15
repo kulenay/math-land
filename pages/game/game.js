@@ -312,11 +312,13 @@ Page({
 
   // ---------- 通关结算 ----------
   finishLevel() {
+    const oldStars = storage.getLevelStars(this.moduleId, this.level.id);
     const stars = star.computeStars(this.firstCorrect, this.total);
     storage.saveLevelResult(this.moduleId, this.level.id, stars, this.firstCorrect);
     sound.play('win');
     const all = this.mod.impl.levels.getAllLevels(this.moduleId);
     const hasNext = this.level.id < all.length;
+    const isPerfect = stars === 3 && oldStars < 3; // 首次满星：特别表现
     this.setData({
       locked: true,
       feedback: null,
@@ -324,11 +326,13 @@ Page({
         levelName: this.level.name,
         correct: this.firstCorrect,
         total: this.total,
+        perfect: isPerfect,
+        title: isPerfect ? '完美通关！' : `${this.level.name} 完成！`,
       },
       starList: Array.from({ length: stars }, (_, i) => i),
       hasNext,
       progress: 100,
-      frogMood: '🏆',
+      frogMood: isPerfect ? '🌟' : '🏆',
       frogText: this.pickFrog(FROG_WORDS.complete),
     });
     // 星星逐个弹出音效
