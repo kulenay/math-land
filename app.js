@@ -19,14 +19,8 @@ App({
     if (settings && typeof settings.soundOn === 'boolean') {
       this.globalData.soundOn = settings.soundOn;
     }
-
-    // 云开发初始化（AI 互动板块用；未开通云开发时静默降级）
-    if (wx.cloud) {
-      try {
-        wx.cloud.init({ traceUser: true });
-      } catch (e) {
-        // 忽略：AI 板块页面会自行提示
-      }
-    }
+    // 说明：AI 互动板块（pages/ai + cloudfunctions/aiChat）当前暂缓，
+    // 为符合上架隐私要求不再初始化 wx.cloud（traceUser 会记录用户 OpenID）。
+    // 以后启用 AI 时，恢复 wx.cloud.init 并确保隐私保护指引已同步更新。
   },
 });

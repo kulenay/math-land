@@ -53,15 +53,4 @@ Page({
   onWalletTap() {
     wx.navigateTo({ url: '/pages/wallet/wallet' });
   },
-
-  // 调试入口：连点跳跳 5 次解锁已开发模块全部关卡
-  onFrogTap() {
-    this._frogTaps = (this._frogTaps || 0) + 1;
-    if (this._frogTaps >= 5) {
-      this._frogTaps = 0;
-      modules.getAll().forEach((m) => storage.unlockAll(m.id));
-      this.refresh();
-      wx.showToast({ title: '已解锁全部关卡 ⭐', icon: 'none' });
-    }
-  },
 });

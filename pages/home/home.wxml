@@ -5,7 +5,7 @@
     <view class="topbar-stars">⭐ {{totalStars}}</view>
   </view>
 
-  <view class="home-frog" bindtap="onFrogTap">
+  <view class="home-frog">
     <text class="frog-body">🐸</text>
     <text class="frog-mood">😊</text>
   </view>
