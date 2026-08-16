@@ -2,6 +2,10 @@
 
 微信小程序 · 小学数学 · 游戏闯关。和跳跳一起认识数字，培养数感！
 
+> **项目状态**：纯本地运行、零网络请求、零个人信息上传——已按上架合规要求
+> 移除云开发初始化与调试入口，正式 AppID 已配置（`wxcd90aaa7911c23ae`）。
+> 上架前完整自查见 [`docs/launch-checklist.md`](docs/launch-checklist.md)。
+
 ## 🎮 当前进度
 
 **模块一「数一数」**（8 关，对应一年级数感启蒙）：
@@ -90,13 +94,15 @@
 - WXML + WXSS（emoji 极简视觉，零图片素材）+ CSS 动画
 - `InnerAudioContext` 合成音效（`assets/sounds/`，可用 `tools/gen_sounds.py` 重新生成；`core/sound.js` 支持连播，供听音数数）
 - 全部交互为点选/框选（儿童触屏友好，无拖拽）
-- 微信云开发 + OpenAI 兼容接口（AI 互动板块，可选）
+- 微信云开发 + OpenAI 兼容接口（AI 互动板块，可选，当前暂缓）
 
 ## 🤖 AI 互动板块（问跳跳）— 暂缓中
 
-> **当前状态：暂缓**。主页入口已撤下（云函数未部署时入口不可用），
+> **当前状态：暂缓（云初始化已移除）**。为符合上架隐私要求（不收集用户 OpenID），
+> `app.js` 中 `wx.cloud.init({ traceUser: true })` 已移除；主页「问跳跳」入口已撤下，
 > 但代码完整保留：`pages/ai/`（聊天页）、`cloudfunctions/aiChat/`（转发云函数）、`test/ai.test.js`。
-> 以后想启用：部署云函数 + 把主页「问跳跳」入口加回即可（见下方部署步骤）。
+> 以后想启用：恢复 `wx.cloud.init` + 部署云函数 + 把主页「问跳跳」入口加回，
+> 并在小程序后台「用户隐私保护指引」中如实声明（见下方部署步骤）。
 
 孩子可以问数学问题（预设问题一键提问或自己输入），
 AI 以"跳跳"小青蛙老师的口吻用低龄语言回答。走**云函数转发**，调用
@@ -154,6 +160,7 @@ math-land/
 │   ├── wallet/                # 数字钱包（wallet 主页 / settings 家长设置）
 │   └── ai/                    # AI 互动板块（问跳跳聊天页，暂缓）
 ├── tools/gen_sounds.py        # 音效合成脚本（可复现）
+├── docs/launch-checklist.md   # 上架检查清单（账号/类目/隐私/审核自查）
 └── web-prototype/             # H5 原型（旧版，仅存档参考）
 ```
 
@@ -161,12 +168,10 @@ math-land/
 
 1. 打开[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 2. 「导入项目」→ 选择本仓库根目录
-3. `project.config.json` 中的 `appid` 目前是测试号（`touristappid`），
-   正式开发请替换为你自己的小程序 AppID（或使用「测试号」预览）
+3. `project.config.json` 已配置正式 AppID（`wxcd90aaa7911c23ae`）；如需用自己的小程序，替换该字段即可
 4. 编译预览即可游玩
 
-> ⚠️ 本仓库尚未配置 `.gitignore` 忽略微信开发者工具自动生成的
-> `project.private.config.json`，如出现请自行加入。
+> `project.private.config.json`（微信开发者工具自动生成的本地配置）已被 `.gitignore` 忽略，不会提交到仓库。
 
 ## 🧪 测试
 
